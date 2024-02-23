@@ -6,13 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
-    "start": "node index.js"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^4.26.1"
+    "@fastify/auth": "^4.6.0",
+    "@fastify/jwt": "^8.0.0",
+    "@fastify/mongodb": "^8.0.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.26.1",
+    "mongodb": "^6.3.0"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^5.0.0",

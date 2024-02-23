@@ -1,17 +1,12 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fastify_1 = __importDefault(require("fastify"));
-const server = (0, fastify_1.default)();
-server.get('/ping', async () => {
-    return 'pong\n';
-});
-server.listen({ port: 8080 }, (err, address) => {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
-    console.log(`Server listening at ${address}`);
-});
+const server_1 = require("./server");
+const server = (0, server_1.build)();
+try {
+    server.listen({ port: 3000 });
+    console.log('Server started successfully');
+}
+catch (err) {
+    server.log.error(err);
+    process.exit(1);
+}
