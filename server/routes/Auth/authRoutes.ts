@@ -71,13 +71,13 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       '/auth', authOpt,
       async (request, reply) => {
         console.log(request.user);
-        return reply.code(200).send(request.user)
+        return reply.code(200).send(request.user);
       }
-    )
+    );
 
+    fastify.get('/logout', async (_request, reply) => {
+         reply.clearCookie('token', {domain: 'localhost', path: '/'});
+         return {};
+      });
   });
-
-
-
-
 }
