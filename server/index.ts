@@ -1,6 +1,6 @@
-import { build } from './server'
+import { build } from './server.js'
 
-const server = build();
+const server = await build();
 
 try {
   server.listen({ port: 3000 });

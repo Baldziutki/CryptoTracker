@@ -4,9 +4,17 @@ import fastifyAuth from '@fastify/auth';
 import fastifyCookie from '@fastify/cookie';
 import fastifyJwt from '@fastify/jwt';
 import dotenv from 'dotenv';
+import fastifyMongodb from '@fastify/mongodb';
 import { FastifyRequest, FastifyReply } from 'fastify';
+import authRoutes from './routes/Auth/authRoutes.js';
 
-export const build = () => {
+declare module 'fastify' {
+    interface FastifyInstance {
+        verifyJWT: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+    }
+  }
+
+export const build = async () => {
 
     dotenv.config();
 
@@ -54,10 +62,20 @@ export const build = () => {
         }
     });
 
-    server.register(require('@fastify/mongodb'), {
+    server.register(fastifyMongodb, {
         forceClose: true,
-        url: dbUrl
+        url: dbUrl,
+        database: 'CryptoTracker'
     });
+
+    await server.after();
+    server.mongo.db?.collection('users').createIndex({
+        email: 1,
+    }, {
+        unique: true,
+    });
+
+    server.register(authRoutes);
 
 
     return server;
