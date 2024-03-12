@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import fastifyMongodb from '@fastify/mongodb';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import authRoutes from './routes/Auth/authRoutes.js';
+import coinsRoutes from './routes/Coins/coinsRoutes.js';
 
 declare module 'fastify' {
     interface FastifyInstance {
@@ -76,6 +77,7 @@ export const build = async () => {
     });
 
     server.register(authRoutes);
+    server.register(coinsRoutes);
 
 
     return server;

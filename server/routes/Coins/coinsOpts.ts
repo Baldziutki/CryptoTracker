@@ -1,5 +1,5 @@
 import { RouteShorthandOptions } from 'fastify';
-import { CoinAdd, CoinDelete } from './coinsType.js';
+import { CoinAdd, CoinDelete, FavoriteCoin, UserCoins } from './coinsType.js';
 
 export const coinAddOpts: RouteShorthandOptions = {
     schema: {
@@ -18,4 +18,39 @@ export const coinDeleteOpts: RouteShorthandOptions = {
             200: CoinDelete
         }
     }
-}
+};
+
+export const userCoinsOpts: RouteShorthandOptions = {
+    schema: {
+        response: {
+            200: UserCoins
+        }
+    }
+};
+
+export const deleteFavoriteCoinsOpts: RouteShorthandOptions = {
+    schema: {
+        body: FavoriteCoin,
+        response: {
+            200: FavoriteCoin
+        }
+    }
+};
+
+export const addFavoriteCoinsOpts: RouteShorthandOptions = {
+    schema: {
+        body: FavoriteCoin,
+        response: {
+            200: FavoriteCoin
+        }
+    }
+};
+
+export const favoriteCoinsOpts: RouteShorthandOptions = {
+    schema: {
+        response: {
+            200: FavoriteCoin
+        }
+    }
+};
+

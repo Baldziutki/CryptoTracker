@@ -1,11 +1,29 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { CoinAddType, CoinDeleteType } from './coinsType.js';
-import { coinAddOpts, coinDeleteOpts } from './coinsOpts.js';
+import { FavoriteCoinType, CoinAddType, CoinDeleteType, FavoriteCoinsType, UserCoinsType } from './coinsType.js';
+import { addFavoriteCoinsOpts, coinAddOpts, coinDeleteOpts, deleteFavoriteCoinsOpts, favoriteCoinsOpts, userCoinsOpts } from './coinsOpts.js';
 
 
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
     fastify.addHook('onRequest', fastify.auth([fastify.verifyJWT]));
+
+
+    fastify.get<{ Reply: UserCoinsType | string }>(
+        '/getCoins', userCoinsOpts,
+        async (request, reply) => {
+
+            const userEmail = (request.user as { email: string }).email;
+
+            const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
+
+            if (!user) {
+                return reply.code(404).send("User not found!");
+            };
+
+            return reply.code(201).send(user?.['coins']);
+
+        }
+    );
 
 
     fastify.patch<{ Body: CoinAddType, Reply: string }>(
@@ -20,7 +38,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
                 if (user) {
                     const userCoins = user['coins'];
 
-                    const coinExistIndex = userCoins.findIndex((element: { coindId: string }) => element.coindId === coinId);
+                    const coinExistIndex = userCoins.findIndex((element: { coinId: string }) => element.coinId === coinId);
 
                     if (coinExistIndex !== -1) {
                         userCoins[coinExistIndex].coinAmount += coinAmount;
@@ -65,14 +83,14 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
                     const userCoins = user['coins'];
 
-                    const coinExistIndex = userCoins.findIndex((element: { coindId: string }) => element.coindId === coinId);
+                    const coinExistIndex = userCoins.findIndex((element: { coinId: string }) => element.coinId === coinId);
 
                     if (coinExistIndex !== -1) {
                         userCoins[coinExistIndex].coinAmount -= coinAmount;
 
                         if (userCoins[coinExistIndex].coinAmount <= 0) {
-                            const updatedCoins = userCoins.filter((element: { coindId: string }) => element.coindId !== coinId);
-                            await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: updatedCoins } });
+                            userCoins.splice(coinExistIndex,1);
+                            await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
                         } else {
                             await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
                         }
@@ -90,8 +108,78 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
                 console.log(error);
             }
         }
+    );
+
+    fastify.get<{Reply: FavoriteCoinsType | string}>(
+        '/getFavoriteCoins', favoriteCoinsOpts,
+        async (request, reply) => {
+            const userEmail = (request.user as { email: string }).email;
+
+            const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
+
+            if (!user) {
+                return reply.code(404).send("User not found!");
+            };
+
+            return reply.code(201).send(user?.['favoriteCoins']);
+
+        }
     )
 
+    fastify.patch<{ Body: FavoriteCoinType, Reply: string }>(
+        '/addFavoriteCoin', addFavoriteCoinsOpts,
+        async (request, reply) => {
+
+            const { coinId, coinName } = request.body;
+
+            const userEmail = (request.user as { email: string }).email;
+
+            const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
+
+            if (user) {
+                const userFavoriteCoins = user['favoriteCoins'];
+                const newFavoriteCoin = {
+                    coinId,
+                    coinName,
+                };
+                userFavoriteCoins.push(newFavoriteCoin);
+
+                await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { favoriteCoins: userFavoriteCoins } });
+
+                reply.code(200).send('New coin added successfully to favorite list!');
+
+            } else {
+                reply.code(404).send('User not found');
+            }
+        }
+    );
+
+    fastify.delete<{ Body: FavoriteCoinType, Reply: string }>(
+        '/deleteFavoriteCoin', deleteFavoriteCoinsOpts,
+        async (request, reply) => {
+            const { coinId } = request.body;
+
+            const userEmail = (request.user as { email: string }).email;
+
+            const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
+
+            if (user) {
+                const userFavoriteCoins = user['favoriteCoins'];
+
+                const coinExistIndex = userFavoriteCoins.findIndex((element: { coinId: string }) => element.coinId === coinId);
+                if (coinExistIndex !== -1) {
+                    userFavoriteCoins.splice(coinExistIndex,1);
+                    await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { favoriteCoins: userFavoriteCoins } });
+                    reply.code(200).send('Coin successfully deleted from favorites!');
+                } else {
+                    reply.code(200).send('Coin not found');
+                }
+
+            } else {
+                reply.code(404).send('User not found');
+            }
+        }
+    )
 
 
 }
