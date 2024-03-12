@@ -13,3 +13,9 @@ export const authResponse = Type.Object({
   iat: Type.Integer(),
 });
 export type AuthResponseType = Static<typeof authResponse>;
+
+export const changePassword = Type.Object({
+  password: Type.String(),
+  newPassword: Type.String(),
+});
+export type changePasswordType = Static<typeof changePassword>;
