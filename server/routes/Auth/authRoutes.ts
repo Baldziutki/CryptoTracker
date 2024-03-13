@@ -1,41 +1,49 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-// import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
-import { UserType, changePasswordType } from './authType.js';
-import { authOpt, userOpts } from './authOpts.js';
+import { UserType, changePasswordType, User, authResponse, changePassword } from './authType.js';
 import bcrypt from 'bcrypt';
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
-  // fastify = Fastify().withTypeProvider<TypeBoxTypeProvider>();
 
   fastify.post<{ Body: UserType, Reply: string }>(
-    '/register', userOpts,
-    async (request, reply) => {
-      try {
-        const { email, password } = request.body;
-        const hashPassword = await bcrypt.hash(password, 10);
-
-        if (email?.length > 128 || password.length > 128) {
-          return reply.code(422).send("Email or password too long!");
-        }
-        const user = {
-          email: email,
-          password: hashPassword,
-          coins: [],
-          favoriteCoins: [],
-          balance: 0
-        };
-
-        await fastify.mongo.db?.collection('users').insertOne(user);
-
-        reply.code(201).send("Registered successfully!");
-      } catch (error) {
-        console.log(error);
+    '/register', {
+    schema: {
+      body: User,
+    },
+    errorHandler: (error, _request, reply) => {
+      if (error.code as unknown as number === 11000) {
+        reply.code(409).send("Account with given email already exists!")
+        return
       }
+      fastify.errorHandler(error, _request, reply)
+    }
+  },
+    async (request, reply) => {
+      const { email, password } = request.body;
+      const hashPassword = await bcrypt.hash(password, 10);
+
+      if (email?.length > 128 || password.length > 128) {
+        return reply.code(422).send("Email or password too long!");
+      }
+      const user = {
+        email: email,
+        password: hashPassword,
+        coins: [],
+        favoriteCoins: [],
+        balance: 0
+      };
+
+      await fastify.mongo.db?.collection('users').insertOne(user);
+
+      reply.code(201).send("Registered successfully!");
     }
   );
 
   fastify.post<{ Body: UserType, Reply: string }>(
-    '/login', userOpts,
+    '/login', {
+    schema: {
+      body: User,
+    },
+  },
     async (request, reply) => {
       const { email, password } = request.body;
       const user = await fastify.mongo.db?.collection('users').findOne({ email });
@@ -69,7 +77,13 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     fastify.addHook('onRequest', fastify.auth([fastify.verifyJWT]));
 
     fastify.get<{ Reply: string | object | Buffer }>(
-      '/auth', authOpt,
+      '/auth', {
+      schema: {
+        response: {
+          201: authResponse,
+        },
+      }
+    },
       async (request, reply) => {
         console.log(request.user);
         return reply.code(200).send(request.user);
@@ -84,9 +98,20 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     );
 
     fastify.patch<{ Body: UserType, Reply: string }>(
-      '/changeEmail', userOpts,
+      '/changeEmail', {
+      schema: {
+        body: User,
+      },
+      errorHandler: (error, _request, reply) => {
+        if (error.code as unknown as number === 11000) {
+          reply.code(409).send("Account with given email already exists!")
+          return
+        }
+        fastify.errorHandler(error, _request, reply)
+      }
+    },
       async (request, reply) => {
-        const {password, email: newEmail} = request.body;
+        const { password, email: newEmail } = request.body;
 
         const userEmail = (request.user as { email: string }).email;
 
@@ -96,8 +121,8 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         }
         const validPassowrd = await bcrypt.compare(password, user['password']);
 
-        if(validPassowrd){
-          await fastify.mongo.db?.collection('users').updateOne({email: userEmail}, {$set: {email: newEmail}});
+        if (validPassowrd) {
+          await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { email: newEmail } });
           const token = fastify.jwt.sign({ _id: user._id, email: newEmail })
           reply
             .setCookie('token', token, {
@@ -117,7 +142,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     );
 
     fastify.patch<{ Body: changePasswordType, Reply: string }>(
-      '/changePassword', 
+      '/changePassword', {
+      schema: {
+        body: changePassword,
+      },
+    },
       async (request, reply) => {
         const { password, newPassword } = request.body;
 
@@ -129,9 +158,9 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         }
         const validPassowrd = await bcrypt.compare(password, user['password']);
 
-        if(validPassowrd){
+        if (validPassowrd) {
           const hashPassword = await bcrypt.hash(newPassword, 10);
-          await fastify.mongo.db?.collection('users').updateOne({email: userEmail}, {$set: {password: hashPassword}});
+          await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { password: hashPassword } });
           return reply.code(200).send("Password successfully changed");
         } else {
           return reply.code(404).send("Wrong password");

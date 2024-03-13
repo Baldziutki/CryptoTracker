@@ -1,15 +1,18 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { FavoriteCoinType, CoinAddType, CoinDeleteType, FavoriteCoinsType, UserCoinsType } from './coinsType.js';
-import { addFavoriteCoinsOpts, coinAddOpts, coinDeleteOpts, deleteFavoriteCoinsOpts, favoriteCoinsOpts, userCoinsOpts } from './coinsOpts.js';
-
-
+import { FavoriteCoinType, CoinAddType, CoinDeleteType, FavoriteCoinsType, UserCoinsType, CoinAdd, CoinDelete, FavoriteCoin, UserCoins } from './coinsType.js';
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
     fastify.addHook('onRequest', fastify.auth([fastify.verifyJWT]));
 
 
     fastify.get<{ Reply: UserCoinsType | string }>(
-        '/getCoins', userCoinsOpts,
+        '/getCoins', {
+        schema: {
+            response: {
+                201: UserCoins
+            }
+        }
+    },
         async (request, reply) => {
 
             const userEmail = (request.user as { email: string }).email;
@@ -27,7 +30,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
 
     fastify.patch<{ Body: CoinAddType, Reply: string }>(
-        '/addCoin', coinAddOpts,
+        '/addCoin', {
+            schema: {
+                body: CoinAdd,
+            }
+        },
         async (request, reply) => {
             try {
                 const { coinId, coinName, coinAmount, coinAddDate } = request.body;
@@ -70,7 +77,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     );
 
     fastify.delete<{ Body: CoinDeleteType, Reply: String }>(
-        '/deleteCoin', coinDeleteOpts,
+        '/deleteCoin', {
+            schema: {
+                body: CoinDelete,
+            }
+        },
         async (request, reply) => {
             try {
                 const { coinId, coinAmount } = request.body;
@@ -89,7 +100,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
                         userCoins[coinExistIndex].coinAmount -= coinAmount;
 
                         if (userCoins[coinExistIndex].coinAmount <= 0) {
-                            userCoins.splice(coinExistIndex,1);
+                            userCoins.splice(coinExistIndex, 1);
                             await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
                         } else {
                             await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
@@ -110,8 +121,14 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         }
     );
 
-    fastify.get<{Reply: FavoriteCoinsType | string}>(
-        '/getFavoriteCoins', favoriteCoinsOpts,
+    fastify.get<{ Reply: FavoriteCoinsType | string }>(
+        '/getFavoriteCoins', {
+            schema: {
+                response: {
+                    201: FavoriteCoin
+                }
+            }
+        },
         async (request, reply) => {
             const userEmail = (request.user as { email: string }).email;
 
@@ -127,7 +144,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     )
 
     fastify.patch<{ Body: FavoriteCoinType, Reply: string }>(
-        '/addFavoriteCoin', addFavoriteCoinsOpts,
+        '/addFavoriteCoin', {
+            schema: {
+                body: FavoriteCoin,
+            }
+        },
         async (request, reply) => {
 
             const { coinId, coinName } = request.body;
@@ -155,7 +176,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     );
 
     fastify.delete<{ Body: FavoriteCoinType, Reply: string }>(
-        '/deleteFavoriteCoin', deleteFavoriteCoinsOpts,
+        '/deleteFavoriteCoin', {
+            schema: {
+                body: FavoriteCoin,
+            }
+        },
         async (request, reply) => {
             const { coinId } = request.body;
 
@@ -168,7 +193,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
                 const coinExistIndex = userFavoriteCoins.findIndex((element: { coinId: string }) => element.coinId === coinId);
                 if (coinExistIndex !== -1) {
-                    userFavoriteCoins.splice(coinExistIndex,1);
+                    userFavoriteCoins.splice(coinExistIndex, 1);
                     await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { favoriteCoins: userFavoriteCoins } });
                     reply.code(200).send('Coin successfully deleted from favorites!');
                 } else {
