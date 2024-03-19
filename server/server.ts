@@ -8,7 +8,8 @@ import fastifyMongodb from '@fastify/mongodb';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import authRoutes from './routes/Auth/authRoutes.js';
 import coinsRoutes from './routes/Coins/coinsRoutes.js';
-
+import supportingRoutes from './routes/Utils/supportingRoutes.js';
+import { setIntervalForCoinAmount } from './routes/Utils/fetchCoinAmount.js';
 declare module 'fastify' {
     interface FastifyInstance {
         verifyJWT: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
@@ -16,7 +17,7 @@ declare module 'fastify' {
   }
 
 export const build = async () => {
-
+    setIntervalForCoinAmount();
     dotenv.config();
 
     const dbUrl: string | undefined = process.env["DB_URL"];
@@ -78,6 +79,7 @@ export const build = async () => {
 
     server.register(authRoutes);
     server.register(coinsRoutes);
+    server.register(supportingRoutes);
 
 
     return server;

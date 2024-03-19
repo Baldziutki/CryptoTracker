@@ -85,7 +85,6 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       }
     },
       async (request, reply) => {
-        console.log(request.user);
         return reply.code(200).send(request.user);
       }
     );
