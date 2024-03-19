@@ -1,3 +1,4 @@
+import { Button } from "@radix-ui/themes";
 import HeaderStats from "./headerStats/layout";
 import SettingsButton from "./settingsButton/layout";
 
@@ -5,12 +6,12 @@ import SettingsButton from "./settingsButton/layout";
 export default function HeaderLayout() {
 
     return (
-        <div className="flex flex-row items-center justify-between gap-60">
+        <div className="flex items-center justify-around">
             <HeaderStats />
-            <div className="flex flex-row">
+            <div className="flex flex-row gap-3">
                 <SettingsButton/>
-                <button className="ml-6 border rounded ">Login</button>
-                <button className="ml-6 border rounded ">Sign up</button>
+                <Button variant="outline" highContrast>Login</Button>
+                <Button color="green">Sign up</Button>
             </div>
         </div>
 
