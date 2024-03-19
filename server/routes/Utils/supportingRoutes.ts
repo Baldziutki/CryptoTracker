@@ -7,7 +7,9 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         '/getCoinAmount', {
             schema:{
                 response:{
-                    201: Number,
+                    201: {
+                        type: 'number'
+                    }
                 }
             }
         }, async (_request, reply) => {
