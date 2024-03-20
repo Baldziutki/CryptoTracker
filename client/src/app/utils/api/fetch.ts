@@ -5,9 +5,9 @@ export const json = async (url: string, options?: Omit<RequestInit, 'body'> & { 
     options = { ...options };
     options.mode = 'cors';
 
-    coinGecko ? options.credentials = 'same-origin' : options.credentials = 'include';
-
     options.headers = { ...options.headers };
+
+    coinGecko ? options.credentials = 'same-origin' : options.credentials = 'include';
 
     if ('content-type' in options.headers) {
         throw new Error('Unexpected \'content-type\' header');
