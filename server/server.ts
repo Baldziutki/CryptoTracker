@@ -10,6 +10,7 @@ import authRoutes from './routes/Auth/authRoutes.js';
 import coinsRoutes from './routes/Coins/coinsRoutes.js';
 import supportingRoutes from './routes/Utils/supportingRoutes.js';
 import { setIntervalForCoinAmount } from './routes/Utils/fetchCoinAmount.js';
+import { setIntervalForExchangesAmount } from './routes/Utils/fetchExchangesAmount.js';
 declare module 'fastify' {
     interface FastifyInstance {
         verifyJWT: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
@@ -18,9 +19,11 @@ declare module 'fastify' {
 
 export const build = async () => {
     setIntervalForCoinAmount();
+    setIntervalForExchangesAmount();
     dotenv.config();
 
     const dbUrl: string | undefined = process.env["DB_URL"];
+    const dbName: string | undefined = process.env["DB_NAME"];
 
     if (!dbUrl) {
         throw new Error('DB_URL not specified in environment variables');
@@ -67,7 +70,7 @@ export const build = async () => {
     server.register(fastifyMongodb, {
         forceClose: true,
         url: dbUrl,
-        database: 'CryptoTracker'
+        database: dbName
     });
 
     await server.after();
