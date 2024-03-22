@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@radix-ui/themes";
 import HeaderStats from "./headerStats/layout";
 import SettingsButton from "./settingsButton/layout";

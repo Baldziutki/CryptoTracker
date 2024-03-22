@@ -164,25 +164,3 @@ export const deleteFavoriteCoin = async (coinId: string) => {
 
     return response.json;
 };
-
-export const getCoinAmount = async () => {
-    const response = await json('/getCoinAmount', {
-    }, process.env.NEXT_PUBLIC_BACKEND_URL);
-
-    if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
-
-    return response.json;
-};
-
-export const getExchangesAmount = async () => {
-    const response = await json('/getExchangesAmount', {
-    }, process.env.NEXT_PUBLIC_BACKEND_URL);
-
-    if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
-
-    return response.json;
-}
