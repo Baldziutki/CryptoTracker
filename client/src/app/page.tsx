@@ -1,11 +1,15 @@
-import HeaderLayout from "./header/layout";
+import Header from "@/components/header/Header";
+import Navbar from "@/components/navbar/Navbar";
 
 export default function Home() {
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main className="flex flex-col items-center justify-between">
+      <header className="w-full border-b pb-5 pt-2">
+        <Header />
+      </header>
       <div className="w-full border-b pb-5 pt-2">
-      <HeaderLayout/>
+        <Navbar />
       </div>
     </main>
   );
