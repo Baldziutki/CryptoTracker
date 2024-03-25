@@ -9,7 +9,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import authRoutes from './routes/Auth/authRoutes.js';
 import coinsRoutes from './routes/Coins/coinsRoutes.js';
 import supportingRoutes from './routes/utils/supportingRoutes.js';
-import { trendingDataInterval } from './routes/utils/coinGeckoData.js';
+import { coinGeckoDataInterval } from './routes/utils/coinGeckoData.js';
 declare module 'fastify' {
     interface FastifyInstance {
         verifyJWT: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
@@ -18,7 +18,7 @@ declare module 'fastify' {
 
 export const build = async () => {
 
-    trendingDataInterval();
+    coinGeckoDataInterval();
 
     dotenv.config();
 
