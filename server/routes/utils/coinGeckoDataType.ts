@@ -22,7 +22,7 @@ const TrendingCoin = Type.Object({
         total_volume: Type.String(),
         total_volume_btc: Type.String(),
         sparkline: Type.String(),
-        content: Type.Optional(Type.Any()), 
+        content: Type.Optional(Type.Any()),
     }),
 });
 
@@ -30,7 +30,7 @@ export const TrendingCoins = Type.Array(Type.Object({
     item: TrendingCoin,
 }));
 
-export  type TrendingCoinsType = Static<typeof TrendingCoins>;
+export type TrendingCoinsType = Static<typeof TrendingCoins>;
 
 const DataType = Type.Object({
     price: Type.String(),
@@ -76,3 +76,18 @@ export const GlobalMarketData = Type.Object({
 });
 
 export type GlobalMarketDataType = Static<typeof GlobalMarketData>;
+
+export const FearAndGreedIndex = Type.Object({
+    name: Type.String(),
+    data: Type.Array(Type.Object({
+        value: Type.String(),
+        value_classification: Type.String(),
+        timestamp: Type.String(),
+        time_until_update: Type.String()
+    })),
+    metadata: Type.Object({
+        error: Type.Null()
+    })
+});
+
+export type FearAndGreedIndexType = Static<typeof FearAndGreedIndex>;

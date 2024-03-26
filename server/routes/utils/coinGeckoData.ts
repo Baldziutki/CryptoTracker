@@ -4,6 +4,7 @@ dotenv.config();
 
 export let trendingCoins: any;
 export let globalMarketData: any;
+export let fearAndGreedData: any;
 
 const getTrendingData = async () => {
     const apiKey: string | undefined = process.env["COINGECKO_API_KEY"];
@@ -37,9 +38,20 @@ const getGlobalMarketData = async () => {
 
 }
 
+const getFearAndGreed = async () => {
+    const response = await fetch('https://api.alternative.me/fng/');
+
+    const data = await response.json();
+    if (response.ok) {
+        fearAndGreedData = data;
+    }
+}
+
 export const coinGeckoDataInterval = () => {
     getTrendingData();
     getGlobalMarketData();
+    getFearAndGreed();
     setInterval(getTrendingData, 600000);
     setInterval(getGlobalMarketData, 660000);
+    setInterval(getFearAndGreed, 660000);
 }
