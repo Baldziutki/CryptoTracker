@@ -165,6 +165,17 @@ export const deleteFavoriteCoin = async (coinId: string) => {
     return response.json;
 };
 
+export const getGlobalMarketData = async () => {
+    const response = await json('/getGlobalMarketData', {
+    }, process.env.NEXT_PUBLIC_BACKEND_URL);
+
+    if (!response.ok || response.json === undefined) {
+        throw new Error(`${response.status} - ${response.json?.error}`);
+    }
+
+    return response.json;
+}
+
 export const getTrendingCoins = async () => {
     const response = await json('/getTrending', {
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
