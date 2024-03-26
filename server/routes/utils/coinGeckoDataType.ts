@@ -61,3 +61,18 @@ const CoinType = Type.Object({
 export const SearchCoins = Type.Array(CoinType);
 
 export type SearchCoinsType = Static<typeof SearchCoins>;
+
+export const GlobalMarketData = Type.Object({
+    active_cryptocurrencies: Type.Number(),
+    upcoming_icos: Type.Number(),
+    ongoing_icos: Type.Number(),
+    ended_icos: Type.Number(),
+    markets: Type.Number(),
+    total_market_cap: Type.Any(),
+    total_volume: Type.Any(),
+    market_cap_percentage: Type.Any(),
+    market_cap_change_percentage_24h_usd: Type.Number(),
+    updated_at: Type.Number(),
+});
+
+export type GlobalMarketDataType = Static<typeof GlobalMarketData>;

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyServerOptions } from "fastify";
-import { trendingCoins } from "./coinGeckoData.js";
-import { TrendingCoinsType, TrendingCoins, SearchCoinsType, SearchCoins } from "./coinGeckoDataType.js";
+import { globalMarketData, trendingCoins } from "./coinGeckoData.js";
+import { TrendingCoinsType, TrendingCoins, SearchCoinsType, SearchCoins, GlobalMarketDataType, GlobalMarketData } from "./coinGeckoDataType.js";
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
 
@@ -33,7 +33,17 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         } else {
             throw new Error('Failed to fetch data');
         }
-    }
-    )
+    });
+
+    fastify.get<{ Reply: GlobalMarketDataType }>(
+        '/getGlobalMarketData', {
+        schema: {
+            response: {
+                201: GlobalMarketData
+            }
+        }
+    }, async (_request, reply) => {
+        return reply.code(201).send(globalMarketData);
+    });
 
 }
