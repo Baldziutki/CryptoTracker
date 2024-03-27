@@ -197,3 +197,17 @@ export const getSearchCoins = async (coinName: string, currency: string = 'usd')
 
     return response.json;
 }
+
+export const getFearAndGreed = async () => {
+    const response = await json('/getFearAndGreed', {
+    }, process.env.NEXT_PUBLIC_BACKEND_URL);
+
+    if (!response.ok || response.json === undefined) {
+        throw new Error(`${response.status} - ${response.json?.error}`);
+    }
+    console.log(response);
+    return response.json;
+}
+
+
+
