@@ -9,10 +9,11 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
-        <div className="flex flex-row pt-2 px-60">
-            <div className="flex flex-row items-center justify-center gap-6 ">
-                <p>Cryptocurrencies</p>
-                <p>Exchanges</p>
+        <div className="flex flex-row pt-2 px-56 ">
+            <div className="flex flex-row items-center justify-center gap-6">
+                <span>Cryptocurrencies</span>
+                <span>Exchanges</span>
+                <span>Wallet</span>
             </div>
             <div className="grow" />
             <SearchButton setIsOpen={setIsOpen}/>

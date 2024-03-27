@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useContext } from "react"
-import { getGlobalMarketData } from "@/utils/api/fetchFromCoinGecko";
+import { getGlobalMarketData } from "@/utils/api/fetchFromServer";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
-
+import { RenderPercentage } from "@/components/renderPercentage/RenderPercentage";
 interface GlobalMarketData {
     coins: number,
     exchanges: number,
@@ -15,12 +15,13 @@ interface GlobalMarketData {
         secondCoin: string,
         secondPercentages: number
     },
+    percentage: number,
 
 }
 
 export default function HeaderStats() {
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketData | undefined>();
-    const {selectedCurrency} = useContext(GlobalDataContext);
+    const { selectedCurrency } = useContext(GlobalDataContext);
 
     const formatNumber = (number: number) => {
         const strNum = number.toFixed();
@@ -38,7 +39,7 @@ export default function HeaderStats() {
     useEffect(() => {
         (async () => {
             const fetchedGlobalMarketData = await getGlobalMarketData();
-            const data = fetchedGlobalMarketData.data;
+            const data = fetchedGlobalMarketData;
             const selectedData = {
                 coins: data.active_cryptocurrencies,
                 exchanges: data.markets,
@@ -57,6 +58,7 @@ export default function HeaderStats() {
                         secondPercentages: secondValue.toFixed(2)
                     }
                 })(),
+                percentage: data.market_cap_change_percentage_24h_usd,
             }
             setGlobalMarketData(selectedData);
         })();
@@ -69,12 +71,27 @@ export default function HeaderStats() {
 
     return (
         <div>
-            <div className="flex flex-row gap-6 text-xs pt-3">
-                <p>Coins: {globalMarketData.coins}</p>
-                <p>Exchanges: {globalMarketData.exchanges}</p>
-                <p>Market Cap: {formatNumber(globalMarketData.marketCap)}</p>
-                <p>24h Vol: {formatNumber(globalMarketData.dailyVolume)}</p>
-                <p>Dominance: {globalMarketData.Dominance.firstCoin} {globalMarketData.Dominance.firstPercentages}% {globalMarketData.Dominance.secondCoin} {globalMarketData.Dominance.secondPercentages}%</p>
+            <div className="flex flex-row gap-6 text-xs pt-3 pl-2">
+                <div>
+                    <span>Coins: </span>
+                    <span className='font-medium'>{globalMarketData.coins}</span>
+                </div>
+                <div>
+                    <span>Exchanges: </span>
+                    <span className='font-medium'>{globalMarketData.exchanges}</span>
+                </div>
+                <div className="flex flex-row gap-1">
+                    <span>Market Cap: </span>
+                    <span className="flex flex-row font-medium">{formatNumber(globalMarketData.marketCap)} <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' /></span>
+                </div>
+                <div>
+                    <span>24h Vol: </span>
+                    <span className='font-medium'>{formatNumber(globalMarketData.dailyVolume)}</span>
+                </div>
+                <div>
+                    <span>Dominance: </span>
+                    <span className='font-medium'>{globalMarketData.Dominance.firstCoin} {globalMarketData.Dominance.firstPercentages}% {globalMarketData.Dominance.secondCoin} {globalMarketData.Dominance.secondPercentages}%</span>
+                </div>
             </div>
         </div>
     )

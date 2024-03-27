@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useContext, useMemo, useRef } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { TextField, ScrollArea } from '@radix-ui/themes'
 import { MagnifyingGlassIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { getSearchCoins, getTrendingCoins } from '@/utils/api/fetchFromServer';
@@ -16,7 +16,6 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
     const [selectedCoin, setSelectedCoin] = useState<any>({});
     const [searchedCoins, setSearchedCoins] = useState<any>([]);
     const { selectedCurrency } = useContext(GlobalDataContext);
-    const dialogRef = useRef<HTMLDialogElement>(null);
 
     const RenderPercentage = ({ number, _class }: { number: number, _class: string }) => {
         if (number < 0) {
@@ -37,12 +36,13 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
     };
 
     const extractPrice = (priceString: string) => {
+        console.log(priceString)
         const match = priceString?.match(/<sub title="([^"]*)">/);
         if (match && match.length > 1) {
             const titleContent = match[1];
             return `$${titleContent}`;
         } else {
-            return priceString
+            return `$${priceString}`
         }
     }
 
@@ -70,23 +70,6 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
         }
     }
 
-    const handleCloseDialog = (event: MouseEvent) => {
-        if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) {
-            setIsOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        if (isOpen) {
-            document.addEventListener('mousedown', handleCloseDialog);
-        } else {
-            document.removeEventListener('mousedown', handleCloseDialog);
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleCloseDialog);
-        };
-    }, [isOpen]);
 
     useEffect(() => {
         (async () => {
@@ -104,7 +87,7 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                     placeholder="Search" variant="soft" color="gray" radius="large"
                     onChange={(e) => searchDebounce(() => searchCoin(e.target.value))}
                     onClick={() => { console.log('click') }}
-                    // onBlur={() => { setIsOpen(false) }}
+                    onBlur={() => { setIsOpen(false) }}
                     autoFocus={isOpen}>
                     <TextField.Slot>
                         <MagnifyingGlassIcon height="16" width="16" />
