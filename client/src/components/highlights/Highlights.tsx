@@ -32,7 +32,15 @@ export default function Highlights() {
 
     const [coins, setCoins] = useState<any>([]);
     const [globalMarketData, setGlobalMarketData] = useState<MarketData>({ marketCap: 0, dailyVolume: 0, percentage: 0 });
-    const [fearAndGreed, setFearAndGreed] = useState<FearAndGreed>();
+    const [fearAndGreed, setFearAndGreed] = useState<FearAndGreed>({
+        name: '',
+        data: [{
+            value: '0',
+            value_classification: '',
+            timestamp: '',
+            time_until_update: ''
+        }]
+    });
     const { selectedCurrency } = useContext(GlobalDataContext);
 
     const formatedMarketCap = (number: number) => {
@@ -73,7 +81,7 @@ export default function Highlights() {
     }, [selectedCurrency]);
 
     return (
-        <div className='px-56 pt-2 w-full'>
+        <div className='px-56 pt-2'>
             <div className='flex flex-col'>
                 <span className='font-extrabold text-2xl'>Cryptocurrency Prices by Market Cap</span>
                 <div className='flex flex-row gap-1'>
@@ -82,8 +90,8 @@ export default function Highlights() {
                     <span>change in the last 24 hours</span>
                 </div>
             </div>
-            <div className="flex flex-row pt-4 gap-2">
-                <div className="flex flex-col gap-3 w-3/12">
+            <div className="grid xl:grid-flow-col 2xl:grid-cols-3  pt-4 gap-2 ">
+                <div className="grid gap-3">
                     <MarketCapCard marketCap={globalMarketData.marketCap} percentage={globalMarketData.percentage} />
                     <TradingVolumeCard dailyVolume={globalMarketData.dailyVolume} />
                 </div>

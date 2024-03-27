@@ -25,7 +25,7 @@ export default function FearAndGreedCard({ value }: { value: number }) {
     }
 
     return (
-        <div className='flex flex-col border-2 rounded-xl drop-shadow-md py-2 px-2 dark:border-gray-800 w-4/12'>
+        <div className='flex flex-col border-2 rounded-xl drop-shadow-md py-2 px-2 dark:border-gray-800 '>
             <span className='font-medium text-lg'>Fear & Greed Index</span>
             <div className='flex flex-col justify-center pt-6'>
                 <span className='font-bold text-3xl text-center'>{value}</span>
