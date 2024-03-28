@@ -80,9 +80,9 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
     }, [])
 
     return (
-        
+
         <div className='relative flex flex-col'>
-            <div className='dark:bg-gray-900 bg-white absolute right-0 rounded drop-shadow-lg' style={{ zIndex: 999, height: 440, width: 450 }}>
+            <div className='dark:bg-slate-800 bg-white absolute right-0 rounded drop-shadow-lg' style={{ zIndex: 999, height: 440, width: 450 }}>
                 <TextField.Root
                     placeholder="Search" variant="soft" color="gray" radius="large"
                     onChange={(e) => searchDebounce(() => searchCoin(e.target.value))}
@@ -97,8 +97,8 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                     <div className='flex flex-col'>
                         {searchedCoins.length ? (
                             searchedCoins.map((item: any) => (
-                                <button className='flex flex-row px-4 py-2 items-center justify-center gap-1 dark:hover:bg-gray-800 hover:bg-slate-200' key={item.id} onMouseOver={() => { setSelectedCoin(item) }}>
-                                    <img src={item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full'/>
+                                <button className='flex flex-row px-4 py-2 items-center justify-center gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.id} onMouseOver={() => { setSelectedCoin(item) }}>
+                                    <img src={item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                                     <span className='font-medium'> {item.name}</span>
                                     <span className='text-xs text-slate-400'>{item.symbol}</span>
                                     <RenderPercentage number={item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center' />
@@ -108,8 +108,8 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                             ))
                         ) : (
                             coins.map((item: any) => (
-                                <button className='flex flex-row px-4 py-2 items-center justify-center gap-1 dark:hover:bg-gray-800 hover:bg-slate-200' key={item.item.id} onMouseOver={() => { setSelectedCoin(item.item) }}>
-                                    <img src={item.item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full'/>
+                                <button className='flex flex-row px-4 py-2 items-center justify-center gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.item.id} onMouseOver={() => { setSelectedCoin(item.item) }}>
+                                    <img src={item.item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                                     <span className='font-medium'> {item.item.name}</span>
                                     <span className='text-xs text-slate-400'>{item.item.symbol}</span>
                                     <RenderPercentage number={item.item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center' />
@@ -144,7 +144,7 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                             <span>{selectedCoin.data?.total_volume}</span>
                         </div>
                     </>
-                ) : (<span className='font-semibold text-center pt-12'>Your search didn't match any records</span>)}
+                ) : (<p className='font-semibold text-center pt-12'>Your search didn't match any records</p>)}
             </div>
         </div>
     )

@@ -71,7 +71,7 @@ export default function HeaderStats() {
 
     return (
         <div>
-            <div className="flex flex-row gap-6 text-xs pt-3 pl-2">
+            <div className="flex flex-row gap-6 text-xs pt-3">
                 <div>
                     <span>Coins: </span>
                     <span className='font-medium'>{globalMarketData.coins}</span>

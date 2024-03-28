@@ -15,7 +15,7 @@ export default function TrendingCard({ coins, selectedCurrency }: { coins: any, 
                 </button>
             </div>
             {coins.map((item: any) => (
-                <button className='grid grid-flow-col grid-col py-2 items-center justify-between gap-2 dark:hover:bg-gray-800 hover:bg-slate-200' key={item.item.id}>
+                <button className='grid grid-flow-col py-2 items-center justify-between gap-2 dark:hover:bg-gray-800 hover:bg-slate-200' key={item.item.id}>
                     <span className='font-light'>#{item.item.market_cap_rank}</span>
                     <img src={item.item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                     <span className='font-medium'> {item.item.name}</span>

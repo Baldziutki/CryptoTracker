@@ -81,7 +81,7 @@ export default function Highlights() {
     }, [selectedCurrency]);
 
     return (
-        <div className='px-56 pt-2'>
+        <div className='pt-2'>
             <div className='flex flex-col'>
                 <span className='font-extrabold text-2xl'>Cryptocurrency Prices by Market Cap</span>
                 <div className='flex flex-row gap-1'>
