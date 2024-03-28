@@ -2,7 +2,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 
 
-export const RenderPercentage = ({ number, _class }: { number: number, _class: string }) => {
+export const RenderPercentage = ({ number, _class='' }: { number: number, _class?: string }) => {
     if (number < 0) {
         return (
             <div className={_class}>
