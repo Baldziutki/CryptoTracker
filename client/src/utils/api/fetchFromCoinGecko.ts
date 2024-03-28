@@ -12,8 +12,8 @@ export const getSupportedCurrencies = async () => {
 };
 
 
-export const getCoinsMarketData = async (currency: string, order: string, per_page: Number, page: Number) => {
-    const response = await json(`coins/markets?vs_currency=${currency}&order=${order}&per_page=${per_page}&page=${page}&sparkline=true&locale=en`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
+export const getCoinsMarketData = async (currency: string, per_page: Number, page: Number, order: string = 'market_cap_desc',) => {
+    const response = await json(`coins/markets?vs_currency=${currency}&order=${order}&per_page=${per_page}&page=${page}&sparkline=true&locale=en&price_change_percentage=1h%2C24h%2C7d`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
         process.env.NEXT_PUBLIC_COINGECKO_API_URL, true);
 
     if (!response.ok || response.json === undefined) {
