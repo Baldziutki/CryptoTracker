@@ -8,10 +8,10 @@ export default function Home() {
   return (
     <div>
       <header className="container mx-auto 2xl:max-w-screen-xl">
-        <div className=" border-b pb-5 pt-2">
+        <div className=" border-b pb-5 pt-2 dark:border-b-slate-700">
           <Header />
         </div>
-        <div className=" border-b pb-5 pt-2">
+        <div className=" border-b pb-5 pt-2 dark:border-b-slate-700">
           <Navbar />
         </div>
       </header>
