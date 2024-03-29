@@ -67,14 +67,13 @@ export default function Highlights() {
                 dailyVolume: data.total_volume[selectedCurrency],
                 percentage: data.market_cap_change_percentage_24h_usd,
             }
-            let topFourCoins: any = [];
-            topFourCoins.push(fetchedTrendingData[0]);
-            topFourCoins.push(fetchedTrendingData[1]);
-            topFourCoins.push(fetchedTrendingData[2]);
-            topFourCoins.push(fetchedTrendingData[3]);
+            let topThreeCoins: any = [];
+            topThreeCoins.push(fetchedTrendingData[0]);
+            topThreeCoins.push(fetchedTrendingData[1]);
+            topThreeCoins.push(fetchedTrendingData[2]);
             const { metadata, ...fearAndGreedData } = fetchedFearAndGreedData;
             setGlobalMarketData(selectedData);
-            setCoins(topFourCoins);
+            setCoins(topThreeCoins);
             setFearAndGreed(fearAndGreedData);
 
         })();
