@@ -2,8 +2,12 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 
 
-export const RenderPercentage = ({ number, _class='' }: { number: number, _class?: string }) => {
-    if (number < 0) {
+export const RenderPercentage = ({ number, _class = '' }: { number: number, _class?: string }) => {
+    if (number === null) {
+        return (
+            <div className={_class}>-</div>
+        )
+    } else if (number < 0) {
         return (
             <div className={_class}>
                 <ChevronDownIcon color='red' />

@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { getCoinsMarketData } from "@/utils/api/fetchFromCoinGecko";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import { RenderPercentage } from "../renderPercentage/RenderPercentage";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import Pagination from "../pagination/Pagination";
 interface coinsAmountData {
     amount: number,
     pages: number
@@ -50,22 +50,25 @@ export default function Cryptocurrencies() {
     }
 
     const formatNumber = (number: number) => {
-        const strNum = number.toFixed();
-        const length = strNum.length;
-        if (number < 1) {
-            return `${number} ${selectedCurrency.toUpperCase()}`
-        }
-        else if (length > 12) {
-            return `${(number / 1000000000000).toFixed(3)} T ${selectedCurrency.toUpperCase()}`
-        } else if (length <= 12 && length >= 9) {
-            return `${(number / 1000000000).toFixed(3)} B ${selectedCurrency.toUpperCase()}`
-        } else if (length < 9 && length >= 6) {
-            return `${(number / 1000000).toFixed(3)} M ${selectedCurrency.toUpperCase()}`
+        if (number === null) {
+            return '-';
         } else {
-            return `${number.toFixed(2)} ${selectedCurrency.toUpperCase()}`
+            const strNum = number.toFixed();
+            const length = strNum.length;
+            if (number < 1) {
+                return `${number} ${selectedCurrency.toUpperCase()}`
+            }
+            else if (length > 12) {
+                return `${(number / 1000000000000).toFixed(3)} T ${selectedCurrency.toUpperCase()}`
+            } else if (length <= 12 && length >= 9) {
+                return `${(number / 1000000000).toFixed(3)} B ${selectedCurrency.toUpperCase()}`
+            } else if (length < 9 && length >= 6) {
+                return `${(number / 1000000).toFixed(3)} M ${selectedCurrency.toUpperCase()}`
+            } else {
+                return `${number.toFixed(2)} ${selectedCurrency.toUpperCase()}`
+            }
         }
     }
-
     const switchFilter = (option: keyof CoinMarketData) => {
         const sortedCoins = [...coins];
         sortedCoins.sort((a: CoinMarketData, b: CoinMarketData) => {
@@ -84,6 +87,7 @@ export default function Cryptocurrencies() {
     }
 
     useEffect(() => {
+        setCoins([]);
         (async () => {
             const fetchedGlobalMarketData = await getGlobalMarketData();
             const fetchedCoinsMarketData = await getCoinsMarketData(selectedCurrency, 100, pagination);
@@ -91,8 +95,8 @@ export default function Cryptocurrencies() {
                 amount: fetchedGlobalMarketData.active_cryptocurrencies,
                 pages: Math.ceil(fetchedGlobalMarketData.active_cryptocurrencies / 100),
             }
-            const coinsMarketData: CoinMarketData[] = fetchedCoinsMarketData.map((item: any, index: number) => ({
-                market_cap_rank: item.market_cap_rank,
+            const coinsMarketData: CoinMarketData[] = fetchedCoinsMarketData.map((item: CoinMarketData) => ({
+                market_cap_rank: item.market_cap_rank ?? '-',
                 image: item.image,
                 name: item.name,
                 symbol: item.symbol,
@@ -104,6 +108,7 @@ export default function Cryptocurrencies() {
                 market_cap: item.market_cap,
                 coinNumber: extractImageNumber(item.image)
             }));
+            console.log(coinsMarketData);
             setCoins(coinsMarketData);
             setCoinsAmount(coinsAmountData);
         })();
@@ -112,54 +117,67 @@ export default function Cryptocurrencies() {
 
     return (
         <div className="pt-2">
-            <table className="min-w-full divide-y ">
-                <thead className="sticky top-0 bg-gray-50 dark:bg-slate-950">
-                    <tr>
-                        <th className="px-6 py-3 text-left">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase" onClick={() => switchFilter('market_cap_rank')}>#</button></th>
-                        <th className="px-6 py-3 text-left">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase " onClick={() => switchFilter('name')}>Coin</button></th>
-                        <th className="px-6 py-3 text-left">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase " onClick={() => switchFilter('current_price')}>Price</button></th>
-                        <th className="px-6 py-3">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase " onClick={() => switchFilter('price_change_percentage_1h_in_currency')}>1h</button></th>
-                        <th className="px-6 py-3">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase " onClick={() => switchFilter('price_change_percentage_24h_in_currency')}>24h</button></th>
-                        <th className="px-6 py-3">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase " onClick={() => switchFilter('price_change_percentage_7d_in_currency')}>7d</button></th>
-                        <th className="px-6 py-3">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase tracking-wider" onClick={() => switchFilter('total_volume')}>24h Volume</button></th>
-                        <th className="px-6 py-3">
-                            <button className="text-xs font-medium text-gray-500 dark:text-slate-50  uppercase tracking-wider" onClick={() => switchFilter('market_cap')}>Market Cap</button></th>
-                        <th className="px-6 py-3 text-xs font-medium text-gray-500 dark:text-slate-50  uppercase tracking-wider">Last 7 Days</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                    {coins.map((item: CoinMarketData) => (
-                        <tr key={item.symbol}>
-                            <td className="px-6 py-4 whitespace-nowrap">{item.market_cap_rank}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                    <img src={item.image} className="w-10 h-10 rounded-full mr-2" alt={item.name} />
-                                    <div>
-                                        <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                                        <div className="text-xs text-gray-500 uppercase">{item.symbol}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap ">{formatNumber(item.current_price)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap"><RenderPercentage number={item.price_change_percentage_1h_in_currency} _class="flex flex-row items-center" /></td>
-                            <td className="px-6 py-4 whitespace-nowrap"><RenderPercentage number={item.price_change_percentage_24h_in_currency} _class="flex flex-row items-center" /></td>
-                            <td className="px-6 py-4 whitespace-nowrap"><RenderPercentage number={item.price_change_percentage_7d_in_currency} _class="flex flex-row items-center" /></td>
-                            <td className="px-6 py-4 whitespace-nowrap ">{formatNumber(item.total_volume)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap ">{formatNumber(item.market_cap)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <img src={`https://www.coingecko.com/coins/${item.coinNumber}/sparkline.svg`} className="w-32 h-10" alt="Sparkline" />
-                            </td>
+            <div className="max-xl:overflow-x-auto">
+                <table className="w-full divide-y divide-gray-200 dark:divide-slate-800">
+                    <thead className="sticky top-0 bg-gray-50 dark:bg-slate-950">
+                        <tr>
+                            <th className="px-6 py-3 text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase" onClick={() => switchFilter('market_cap_rank')}>#</button>
+                            </th>
+                            <th className="px-6 py-3 text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('name')}>Coin</button>
+                            </th>
+                            <th className="px-6 py-3 text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('current_price')}>Price</button>
+                            </th>
+                            <th className="px-6 py-3 text-right xl:text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('price_change_percentage_1h_in_currency')}>1h</button>
+                            </th>
+                            <th className="px-6 py-3 text-right xl:text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('price_change_percentage_24h_in_currency')}>24h</button>
+                            </th>
+                            <th className="px-6 py-3 text-right xl:text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('price_change_percentage_7d_in_currency')}>7d</button>
+                            </th>
+                            <th className="px-6 py-3 text-right xl:text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase tracking-wider" onClick={() => switchFilter('total_volume')}>24h Volume</button>
+                            </th>
+                            <th className="px-6 py-3 text-right xl:text-left">
+                                <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase tracking-wider" onClick={() => switchFilter('market_cap')}>Market Cap</button>
+                            </th>
+                            <th className="px-6 py-3 text-xs font-medium text-gray-500 dark:text-slate-50 uppercase tracking-wider">Last 7 Days</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-slate-800">
+                        {coins.map((item: CoinMarketData) => (
+                            <tr key={item.symbol}>
+                                <td className="px-6 py-4 whitespace-nowrap">{item.market_cap_rank}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <img src={item.image} className="w-10 h-10 rounded-full mr-2" alt={item.name} />
+                                        <div>
+                                            <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                                            <div className="text-xs text-gray-500 uppercase">{item.symbol}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap ">{formatNumber(item.current_price)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap xl:text-right"><RenderPercentage number={item.price_change_percentage_1h_in_currency} _class="flex flex-row items-center justify-end" /></td>
+                                <td className="px-6 py-4 whitespace-nowrap xl:text-right"><RenderPercentage number={item.price_change_percentage_24h_in_currency} _class="flex flex-row items-center justify-end" /></td>
+                                <td className="px-6 py-4 whitespace-nowrap xl:text-right"><RenderPercentage number={item.price_change_percentage_7d_in_currency} _class="flex flex-row items-center justify-end" /></td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right xl:text-left">{formatNumber(item.total_volume)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right xl:text-left">{formatNumber(item.market_cap)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <img src={`https://www.coingecko.com/coins/${item.coinNumber}/sparkline.svg`} className="w-32 h-10" alt="Sparkline" />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <div className="py-6">
+                <Pagination currentPage={pagination} totalPages={coinsAmount.pages} />
+            </div>
         </div>
-    )
+    );
 }

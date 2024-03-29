@@ -1,3 +1,4 @@
+import { off } from "process";
 import { json } from "./fetch";
 
 export const getSupportedCurrencies = async () => {
@@ -20,7 +21,7 @@ export const getCoinsMarketData = async (currency: string, per_page: Number, pag
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 
-    return response.json;
+    return response.json as any[];
 };
 
 export const getCurrentCoinData = async (coinId: string) => {
