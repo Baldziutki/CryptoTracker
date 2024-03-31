@@ -31,7 +31,7 @@ export default function PriceSection(props: PriceSection) {
                 <img src={image} className="w-6 h-6" />
                 <span className="text-xl text font-medium">{name}</span>
                 <span className="text-sm text-gray-500">{symbol} Price</span>
-                <span className="text-sm bg-gray-100 rounded-md px-1">#{market_cap_rank}</span>
+                <span className="text-sm bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
             </div>
             <div className="flex">
                 <span className="text-3xl font-bold">{price} {selectedCurrency.toUpperCase()}</span>

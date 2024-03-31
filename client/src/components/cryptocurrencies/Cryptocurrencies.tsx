@@ -156,7 +156,7 @@ export default function Cryptocurrencies() {
                                     <div className="flex items-center">
                                         <img src={item.image} className="w-10 h-10 rounded-full mr-2" alt={item.name} />
                                         <div>
-                                            <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                                            <div className="text-sm font-medium text-gray-900 dark:text-white">{item.name}</div>
                                             <div className="text-xs text-gray-500 uppercase">{item.symbol}</div>
                                         </div>
                                     </div>

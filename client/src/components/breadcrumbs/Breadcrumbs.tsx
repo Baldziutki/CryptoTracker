@@ -4,7 +4,7 @@ import { ReactElement, Fragment } from "react"
 export const Breadcrumbs = {
     Item: function Item({ name, link, className }: { name: string, link?: string, className?: string }) {
         if (!link) {
-            return <span>{name}</span>
+            return <span className={className}>{name}</span>
         }
         return <a href={link} className={className}>{name}</a>
     },
