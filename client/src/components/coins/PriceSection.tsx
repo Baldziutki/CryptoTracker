@@ -26,7 +26,7 @@ export default function PriceSection(props: PriceSection) {
 
 
     return (
-        <div className="max-w-96">
+        <div className="max-w-96 pt-2">
             <div className="flex flex-row gap-1 items-center">
                 <img src={image} className="w-6 h-6" />
                 <span className="text-xl text font-medium">{name}</span>
@@ -34,7 +34,7 @@ export default function PriceSection(props: PriceSection) {
                 <span className="text-sm bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
             </div>
             <div className="flex">
-                <span className="text-3xl font-bold">{price} {selectedCurrency.toUpperCase()}</span>
+                <span className="text-3xl font-bold">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(price)}</span>
                 <RenderPercentage number={price_change} _class="flex items-center font-bold text-lg" />
             </div>
             <div className="flex">
@@ -44,9 +44,9 @@ export default function PriceSection(props: PriceSection) {
             <div>
                 <Progress value={((high_24h - price) / (price - low_24h)) * 100} />
                 <div className="flex items-center justify-between text-sm font-medium">
-                    <span>{low_24h} {selectedCurrency.toUpperCase()}</span>
+                    <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(low_24h)}</span>
                     <span>24h Range</span>
-                    <span>{high_24h} {selectedCurrency.toUpperCase()}</span>
+                    <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(high_24h)}</span>
                 </div>
             </div>
         </div>

@@ -13,6 +13,7 @@ interface coinsAmountData {
 }
 
 interface CoinMarketData {
+    id: string,
     market_cap_rank: number,
     image: string,
     name: string,
@@ -96,6 +97,7 @@ export default function Cryptocurrencies() {
                 pages: Math.ceil(fetchedGlobalMarketData.active_cryptocurrencies / 100),
             }
             const coinsMarketData: CoinMarketData[] = fetchedCoinsMarketData.map((item: CoinMarketData) => ({
+                id: item.id,
                 market_cap_rank: item.market_cap_rank ?? '-',
                 image: item.image,
                 name: item.name,
@@ -108,11 +110,10 @@ export default function Cryptocurrencies() {
                 market_cap: item.market_cap,
                 coinNumber: extractImageNumber(item.image)
             }));
-            console.log(coinsMarketData);
             setCoins(coinsMarketData);
             setCoinsAmount(coinsAmountData);
         })();
-    }, [pagination]);
+    }, [selectedCurrency,pagination]);
 
 
     return (
@@ -153,15 +154,15 @@ export default function Cryptocurrencies() {
                             <tr key={item.symbol}>
                                 <td className="px-6 py-4 whitespace-nowrap">{item.market_cap_rank}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="flex items-center">
+                                    <a className="flex items-center" href={`/coins/${item.id}`}>
                                         <img src={item.image} className="w-10 h-10 rounded-full mr-2" alt={item.name} />
                                         <div>
                                             <div className="text-sm font-medium text-gray-900 dark:text-white">{item.name}</div>
                                             <div className="text-xs text-gray-500 uppercase">{item.symbol}</div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap ">{formatNumber(item.current_price)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap ">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(item.current_price)}</td>
                                 <td className="px-6 py-4 whitespace-nowrap xl:text-right"><RenderPercentage number={item.price_change_percentage_1h_in_currency} _class="flex flex-row items-center justify-end" /></td>
                                 <td className="px-6 py-4 whitespace-nowrap xl:text-right"><RenderPercentage number={item.price_change_percentage_24h_in_currency} _class="flex flex-row items-center justify-end" /></td>
                                 <td className="px-6 py-4 whitespace-nowrap xl:text-right"><RenderPercentage number={item.price_change_percentage_7d_in_currency} _class="flex flex-row items-center justify-end" /></td>
