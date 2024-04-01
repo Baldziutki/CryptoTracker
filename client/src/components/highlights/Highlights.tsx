@@ -84,7 +84,7 @@ export default function Highlights() {
             <div className='flex flex-col'>
                 <span className='font-extrabold text-2xl'>Cryptocurrency Prices by Market Cap</span>
                 <div className='flex flex-row gap-1'>
-                    <span className='text-sm'>The global cryptocurrency market cap today is {formatedMarketCap(globalMarketData.marketCap)}, a</span>
+                    <span className='text-sm'>The global cryptocurrency market cap today is {new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(globalMarketData.marketCap)}, a</span>
                     <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' />
                     <span>change in the last 24 hours</span>
                 </div>

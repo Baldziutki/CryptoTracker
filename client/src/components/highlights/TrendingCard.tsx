@@ -23,7 +23,7 @@ export default function TrendingCard({ coins, selectedCurrency }: { coins: any, 
                             <span className='font-medium text-left'>{item.item.name}</span>
                             <span className='text-xs text-slate-400 text-left'>{item.item.symbol}</span>
                         </div>
-                        <span className=' text-right'>${Number(item.item.data.price).toFixed(6)}</span>
+                        <span className=' text-right'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(item.item.data.price)}</span>
                         <RenderPercentage number={item.item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center justify-end' />
                     </button>
                 ))}

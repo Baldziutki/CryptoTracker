@@ -82,11 +82,11 @@ export default function HeaderStats() {
                 </div>
                 <div className="flex flex-row gap-1">
                     <span>Market Cap: </span>
-                    <span className="flex flex-row font-medium">{formatNumber(globalMarketData.marketCap)} <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' /></span>
+                    <span className="flex flex-row font-medium">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(globalMarketData.marketCap)} <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' /></span>
                 </div>
                 <div>
                     <span>24h Vol: </span>
-                    <span className='font-medium'>{formatNumber(globalMarketData.dailyVolume)}</span>
+                    <span className='font-medium'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(globalMarketData.dailyVolume)}</span>
                 </div>
                 <div>
                     <span>Dominance: </span>
