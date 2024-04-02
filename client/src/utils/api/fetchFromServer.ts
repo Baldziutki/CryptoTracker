@@ -205,9 +205,18 @@ export const getFearAndGreed = async () => {
     if (!response.ok || response.json === undefined) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
-    console.log(response);
+    
     return response.json;
 }
 
+export const getSupportedCurrencies = async () => {
+    const response = await json('/getSupportedCurrencies', {
+    }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
+    if (!response.ok || response.json === undefined) {
+        throw new Error(`${response.status} - ${response.json?.error}`);
+    }
+
+    return response.json;
+}
 

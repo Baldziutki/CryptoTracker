@@ -47,7 +47,7 @@ export const getHistoricalCoinData = async (coinId: string, date: string) => {
 };
 
 export const getCoinMarketChart = async (coinId: string, currency: string, days: Number) => {
-    const response = await json(`coins/${coinId}/market_chart?vs_currency=${currency}&days=${days}&interval=daily&precision=full`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
+    const response = await json(`coins/${coinId}/market_chart?vs_currency=${currency}&days=${days}&precision=full`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
         process.env.NEXT_PUBLIC_COINGECKO_API_URL, true);
 
     if (!response.ok || response.json === undefined) {
