@@ -2,7 +2,7 @@
 
 import { RenderPercentage } from "../renderPercentage/RenderPercentage"
 import { ChevronRightIcon } from "@radix-ui/react-icons"
-
+import { FormatNumber } from "../numberFormaters/NumberFormaters"
 export default function TrendingCard({ coins, selectedCurrency }: { coins: any, selectedCurrency: string }) {
 
     return (
@@ -26,7 +26,7 @@ export default function TrendingCard({ coins, selectedCurrency }: { coins: any, 
                             <span className='font-medium text-left'>{item.item.name}</span>
                             <span className='text-xs text-slate-400 text-left'>{item.item.symbol}</span>
                         </div>
-                        <span className=' text-right'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(item.item.data.price)}</span>
+                        <span className=' text-right'><FormatNumber number={item.item.data.price} currency={selectedCurrency}/></span>
                         <RenderPercentage number={item.item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center justify-end' />
                     </a>
                 ))}

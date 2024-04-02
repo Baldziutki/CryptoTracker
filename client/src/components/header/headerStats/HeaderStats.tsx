@@ -4,6 +4,20 @@ import { useState, useEffect, useContext } from "react"
 import { getGlobalMarketData } from "@/utils/api/fetchFromServer";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import { RenderPercentage } from "@/components/renderPercentage/RenderPercentage";
+import dynamic from "next/dynamic";
+const NoSSR = dynamic(() => Promise.resolve(({ number, currency }: { number: number, currency:string }) => {
+    const strNum = number.toFixed();
+    const length = strNum.length;
+
+    if (length > 12) {
+        return <> {new Intl.NumberFormat('ja-JP', { style: 'currency', currency: currency }).format((number / 1000000000000))} T </>
+    } else if (length <= 12 && length >= 9) {
+        return <> {new Intl.NumberFormat('ja-JP', { style: 'currency', currency: currency }).format((number / 1000000000))} B </>
+    } else {
+        return <> {new Intl.NumberFormat('ja-JP', { style: 'currency', currency: currency }).format((number))} </>
+    }
+}), { ssr: false })
+
 interface GlobalMarketData {
     coins: number,
     exchanges: number,
@@ -23,18 +37,6 @@ export default function HeaderStats() {
     const [globalMarketData, setGlobalMarketData] = useState<GlobalMarketData | undefined>();
     const { selectedCurrency } = useContext(GlobalDataContext);
 
-    const formatNumber = (number: number) => {
-        const strNum = number.toFixed();
-        const length = strNum.length;
-
-        if (length > 12) {
-            return `${new Intl.NumberFormat('ja-JP', { style: 'currency', currency: selectedCurrency }).format((number / 1000000000000))}T`
-        } else if (length <= 12 && length >= 9) {
-            return `${new Intl.NumberFormat('ja-JP', { style: 'currency', currency: selectedCurrency }).format((number / 1000000000))}B`
-        } else {
-            return `${new Intl.NumberFormat('ja-JP', { style: 'currency', currency: selectedCurrency }).format((number))}T`
-        }
-    }
 
     useEffect(() => {
         (async () => {
@@ -82,11 +84,11 @@ export default function HeaderStats() {
                 </div>
                 <div className="flex flex-row gap-1">
                     <span>Market Cap: </span>
-                    <span className="flex flex-row font-medium">{formatNumber(globalMarketData.marketCap)} <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' /></span>
+                    <span className="flex flex-row font-medium"><NoSSR number={globalMarketData.marketCap} currency={selectedCurrency}/> <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' /></span>
                 </div>
                 <div>
                     <span>24h Vol: </span>
-                    <span className='font-medium'>{formatNumber(globalMarketData.dailyVolume)}</span>
+                    <span className='font-medium'><NoSSR number={globalMarketData.dailyVolume} currency={selectedCurrency}/></span>
                 </div>
                 <div>
                     <span>Dominance: </span>

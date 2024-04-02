@@ -1,4 +1,3 @@
-import { off } from "process";
 import { json } from "./fetch";
 
 export const getSupportedCurrencies = async () => {
@@ -100,3 +99,14 @@ export const searchCoins = async (input: string) => {
 
     return response.json;
 }
+
+export const getExchangesData = async ( per_page: Number, page: Number) => {
+    const response = await json(`exchanges?per_page=${per_page}&page=${page}`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
+        process.env.NEXT_PUBLIC_COINGECKO_API_URL, true);
+
+    if (!response.ok || response.json === undefined) {
+        throw new Error(`${response.status} - ${response.json?.error}`);
+    }
+
+    return response.json as any[];
+};

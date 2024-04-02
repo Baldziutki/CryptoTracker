@@ -7,6 +7,7 @@ import { getCoinsMarketData } from "@/utils/api/fetchFromCoinGecko";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import { RenderPercentage } from "../renderPercentage/RenderPercentage";
 import Pagination from "../pagination/Pagination";
+
 interface coinsAmountData {
     amount: number,
     pages: number
@@ -131,13 +132,13 @@ export default function Cryptocurrencies() {
                             <th className="px-6 py-3 text-left">
                                 <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('current_price')}>Price</button>
                             </th>
-                            <th className="px-6 py-3 text-right xl:text-left">
+                            <th className="px-6 py-3 text-right ">
                                 <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('price_change_percentage_1h_in_currency')}>1h</button>
                             </th>
-                            <th className="px-6 py-3 text-right xl:text-left">
+                            <th className="px-6 py-3 text-right ">
                                 <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('price_change_percentage_24h_in_currency')}>24h</button>
                             </th>
-                            <th className="px-6 py-3 text-right xl:text-left">
+                            <th className="px-6 py-3 text-right ">
                                 <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase " onClick={() => switchFilter('price_change_percentage_7d_in_currency')}>7d</button>
                             </th>
                             <th className="px-6 py-3 text-right xl:text-left">
