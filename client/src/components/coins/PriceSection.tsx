@@ -20,29 +20,31 @@ interface PriceSection {
 
 export default function PriceSection(props: PriceSection) {
 
-    const {selectedCurrency} = useContext(GlobalDataContext);
+    const { selectedCurrency } = useContext(GlobalDataContext);
     const { image, name, symbol, market_cap_rank, price, price_change, low_24h, high_24h, current_price_to_bitcoin, price_change_24h_to_bitcoin } = props;
 
 
 
     return (
-        <div className="max-w-96 pt-2">
-            <div className="flex flex-row gap-1 items-center">
-                <img src={image} className="w-6 h-6" />
-                <span className="text-xl text font-medium">{name}</span>
-                <span className="text-sm text-gray-500">{symbol} Price</span>
-                <span className="text-sm bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
-            </div>
-            <div className="flex">
-                <span className="text-3xl font-bold">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(price)}</span>
-                <RenderPercentage number={price_change} _class="flex items-center font-bold text-lg" />
+        <div className="pt-2 ">
+            <div className="flex flex-row justify-evenly">
+                <div className="flex items-center gap-1">
+                    <img src={image} className="w-12 h-12 rounded-full" />
+                    <span className="text-5xl text font-medium">{name}</span>
+                    <span className="text-lg text-gray-500">{symbol} Price</span>
+                    <span className="text-lg bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
+                </div>
+                <div className="flex justify-center">
+                    <span className="text-4xl font-bold">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(price)}</span>
+                    <RenderPercentage number={price_change} _class="flex items-center font-bold text-lg" />
+                </div>
             </div>
             <div className="flex">
                 <span className="text-sm text-gray-500 pr-1">{current_price_to_bitcoin} BTC</span>
                 <RenderPercentage number={price_change_24h_to_bitcoin} _class="flex items-center text-sm" />
             </div>
             <div>
-                <Progress value={((high_24h - price) / (price - low_24h)) * 100} />
+                <Progress value={(Math.abs(high_24h - price) /Math.abs(price - low_24h))} />
                 <div className="flex items-center justify-between text-sm font-medium">
                     <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(low_24h)}</span>
                     <span>24h Range</span>

@@ -19,7 +19,7 @@ export default function DataSection(props: DataSectionProps) {
     const { market_cap, fully_diluted_valuation, total_volume, total_supply, circulating_supply, max_supply } = props;
 
     return (
-        <div className="flex flex-col max-w-96 gap-y-4 pt-4">
+        <div className="flex flex-col gap-y-5 pt-4 max-lg:max-w-full">
             <div className="flex border-b-[1px] dark:border-slate-700 justify-between">
                 <span>Market Cap</span>
                 <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(market_cap)}</span>
@@ -34,7 +34,7 @@ export default function DataSection(props: DataSectionProps) {
             </div>
             <div className="flex border-b-[1px] dark:border-slate-700 justify-between">
                 <span>Circulating Supply</span>
-                <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(total_supply)}</span>
+                <span>{new Intl.NumberFormat().format(total_supply)}</span>
             </div>
             <div className="flex border-b-[1px] dark:border-slate-700 justify-between">
                 <span>Total Supply</span>
