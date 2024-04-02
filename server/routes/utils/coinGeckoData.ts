@@ -5,6 +5,7 @@ dotenv.config();
 export let trendingCoins: any;
 export let globalMarketData: any;
 export let fearAndGreedData: any;
+export let currencies: string[];
 
 const getTrendingData = async () => {
     const apiKey: string | undefined = process.env["COINGECKO_API_KEY"];
@@ -38,6 +39,21 @@ const getGlobalMarketData = async () => {
 
 }
 
+const getSupportedCurrencies = async () => {
+    const apiKey: string | undefined = process.env["COINGECKO_API_KEY"];
+    const response = await fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies', {
+        headers: {
+            "x-cg-demo-api-key": apiKey || '',
+        }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        currencies = data;
+    }
+}
+
 const getFearAndGreed = async () => {
     const response = await fetch('https://api.alternative.me/fng/');
 
@@ -51,7 +67,9 @@ export const coinGeckoDataInterval = () => {
     getTrendingData();
     getGlobalMarketData();
     getFearAndGreed();
+    getSupportedCurrencies();
     setInterval(getTrendingData, 600000);
     setInterval(getGlobalMarketData, 660000);
     setInterval(getFearAndGreed, 660000);
+    setInterval(getSupportedCurrencies, 600000);
 }

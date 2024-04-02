@@ -91,3 +91,7 @@ export const FearAndGreedIndex = Type.Object({
 });
 
 export type FearAndGreedIndexType = Static<typeof FearAndGreedIndex>;
+
+export const SupportedCurrencies = Type.Array(Type.String());
+
+export type SupportedCurrenciesType = Static<typeof SupportedCurrencies>;

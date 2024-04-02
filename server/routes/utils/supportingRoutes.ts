@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyServerOptions } from "fastify";
-import { fearAndGreedData, globalMarketData, trendingCoins } from "./coinGeckoData.js";
-import { TrendingCoinsType, TrendingCoins, SearchCoinsType, SearchCoins, GlobalMarketDataType, GlobalMarketData, FearAndGreedIndexType, FearAndGreedIndex } from "./coinGeckoDataType.js";
+import { currencies, fearAndGreedData, globalMarketData, trendingCoins } from "./coinGeckoData.js";
+import { TrendingCoinsType, TrendingCoins, SearchCoinsType, SearchCoins, GlobalMarketDataType, GlobalMarketData, FearAndGreedIndexType, FearAndGreedIndex, SupportedCurrencies, SupportedCurrenciesType } from "./coinGeckoDataType.js";
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
 
@@ -55,6 +55,17 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         }
     }, async (_request, reply) => {
         return reply.code(201).send(fearAndGreedData);
+    });
+
+    fastify.get<{ Reply: SupportedCurrenciesType }>(
+        '/getSupportedCurrencies', {
+        schema: {
+            response: {
+                201: SupportedCurrencies
+            }
+        }
+    }, async (_request, reply) => {
+        return reply.code(201).send(currencies);
     });
 
 }
