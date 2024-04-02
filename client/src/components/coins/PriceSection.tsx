@@ -1,7 +1,7 @@
 'use client'
 import { useContext } from "react";
 import { RenderPercentage } from "../renderPercentage/RenderPercentage";
-import { Progress } from "@radix-ui/themes";
+import { Progress, Skeleton } from "@radix-ui/themes";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 
 
@@ -44,7 +44,7 @@ export default function PriceSection(props: PriceSection) {
                 <RenderPercentage number={price_change_24h_to_bitcoin} _class="flex items-center text-sm" />
             </div>
             <div>
-                <Progress value={(Math.abs(high_24h - price) /Math.abs(price - low_24h))} />
+                {high_24h ? <Progress value={(Math.abs(high_24h - price) /Math.abs(price - low_24h))} /> : <Progress value={0}/>}
                 <div className="flex items-center justify-between text-sm font-medium">
                     <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(low_24h)}</span>
                     <span>24h Range</span>
