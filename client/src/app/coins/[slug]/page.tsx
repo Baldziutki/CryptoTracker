@@ -9,6 +9,7 @@ import { getCoinMarketChart, getCurrentCoinData } from "@/utils/api/fetchFromCoi
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import HistoricalPrice from "@/components/coins/HistoricalPrice";
 import CoinCalculator from "@/components/coins/CoinCalculator";
+import { SegmentedControl } from "@radix-ui/themes";
 
 export default function Coin() {
 
@@ -20,10 +21,9 @@ export default function Coin() {
     const [color, setColor] = useState('blue');
     const params = useParams<{ slug: string }>();
     const { selectedCurrency } = useContext(GlobalDataContext)
-    const [activeButton, setActiveButton] = useState<number>(365);
 
     const handleButtonClick = (days: number) => {
-        setActiveButton(days);
+        setDays(days);
     };
 
     useEffect(() => {
@@ -114,21 +114,13 @@ export default function Coin() {
             </div>
             <div>
                 <div className="flex items-center justify-end gap-2 pb-2">
-                    <button
-                        className={`border-2 rounded w-12 ${activeButton === 1 ? 'bg-slate-300 dark:bg-slate-600' : ''}`}
-                        onClick={() => handleButtonClick(1)}>24h</button>
-                    <button
-                        className={`border-2 rounded w-12 ${activeButton === 7 ? 'bg-slate-300 dark:bg-slate-600' : ''}`}
-                        onClick={() => handleButtonClick(7)}>7d</button>
-                    <button
-                        className={`border-2 rounded w-12 ${activeButton === 31 ? 'bg-slate-300 dark:bg-slate-600' : ''}`}
-                        onClick={() => handleButtonClick(31)}>1m</button>
-                    <button
-                        className={`border-2 rounded w-12 ${activeButton === 92 ? 'bg-slate-300 dark:bg-slate-600' : ''}`}
-                        onClick={() => handleButtonClick(92)}>3m</button>
-                    <button
-                        className={`border-2 rounded w-12 ${activeButton === 365 ? 'bg-slate-300 dark:bg-slate-600' : ''}`}
-                        onClick={() => handleButtonClick(365)}>1y</button>
+                    <SegmentedControl.Root defaultValue="1y">
+                        <SegmentedControl.Item value="24h" onClick={() => handleButtonClick(1)}>24h</SegmentedControl.Item>
+                        <SegmentedControl.Item value="7d" onClick={() => handleButtonClick(7)}>7d</SegmentedControl.Item>
+                        <SegmentedControl.Item value="1m" onClick={() => handleButtonClick(31)}>1m</SegmentedControl.Item>
+                        <SegmentedControl.Item value="3m" onClick={() => handleButtonClick(92)}>3m</SegmentedControl.Item>
+                        <SegmentedControl.Item value="1y" onClick={() => handleButtonClick(365)}>1y</SegmentedControl.Item>
+                    </SegmentedControl.Root>
                 </div>
                 <CoinChart {...options} />
             </div>
