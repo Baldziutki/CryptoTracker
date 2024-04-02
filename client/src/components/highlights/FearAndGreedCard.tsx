@@ -1,27 +1,14 @@
 
 import { Progress, Flex } from '@radix-ui/themes';
 
-export default function FearAndGreedCard({ value }: { value: number }) {
+export default function FearAndGreedCard({ value = 0, value_classification = '' }: { value: number, value_classification:string }) {
     const fngValue = [0, 0, 0, 0, 0];
-    let value_classification = ''
     for (let i = 0; i < fngValue.length; i++) {
         if (value > 20 * i && value < 20 * (i + 1)) {
             fngValue[i] = (value - 20 * i) * 5
         } else if (value > 20 * i) {
             fngValue[i] = 100;
         }
-    }
-
-    if (value <= 20) {
-        value_classification = 'Extreme Fear'
-    } else if (value <= 40) {
-        value_classification = 'Fear'
-    } else if (value <= 60) {
-        value_classification = 'Neutral'
-    } else if (value <= 80) {
-        value_classification = 'Greed'
-    } else {
-        value_classification = 'Extreme Greed'
     }
 
     return (

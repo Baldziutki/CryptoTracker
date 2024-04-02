@@ -5,6 +5,7 @@ import { getTrendingCoins } from '@/utils/api/fetchFromServer';
 import { getGlobalMarketData, getFearAndGreed } from '@/utils/api/fetchFromServer';
 import { GlobalDataContext } from '@/utils/context/GlobalDataContext';
 import { RenderPercentage } from '../renderPercentage/RenderPercentage';
+
 import MarketCapCard from './MarketCapCard';
 import TradingVolumeCard from './TradingVolumeCard';
 import TrendingCard from './TrendingCard';
@@ -48,11 +49,11 @@ export default function Highlights() {
         const length = strNum.length;
 
         if (length > 12) {
-            return `${(number / 1000000000000).toFixed(2)}T Trillion ${selectedCurrency.toUpperCase()}`
+            return `${new Intl.NumberFormat('ja-JP', { style: 'currency', currency: selectedCurrency }).format((number / 1000000000000))} Trillion`
         } else if (length <= 12 && length >= 9) {
-            return `${(number / 1000000000).toFixed(2)}B Billion ${selectedCurrency.toUpperCase()}`
+            return `${new Intl.NumberFormat('ja-JP', { style: 'currency', currency: selectedCurrency }).format((number / 1000000000))} Billion`
         } else {
-            return `${(number / 1000).toFixed(2)}K Thousand ${selectedCurrency.toUpperCase()}`
+            return `${new Intl.NumberFormat('ja-JP', { style: 'currency', currency: selectedCurrency }).format((number))} Thousand`
         }
     }
 
@@ -84,7 +85,7 @@ export default function Highlights() {
             <div className='flex flex-col'>
                 <span className='font-extrabold text-2xl'>Cryptocurrency Prices by Market Cap</span>
                 <div className='flex flex-row gap-1'>
-                    <span className='text-sm'>The global cryptocurrency market cap today is {new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(globalMarketData.marketCap)}, a</span>
+                    <span className='text-sm'>The global cryptocurrency market cap today is {formatedMarketCap(globalMarketData.marketCap)}, a</span>
                     <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' />
                     <span>change in the last 24 hours</span>
                 </div>
@@ -95,7 +96,7 @@ export default function Highlights() {
                     <TradingVolumeCard dailyVolume={globalMarketData.dailyVolume} />
                 </div>
                 <TrendingCard coins={coins} selectedCurrency={`${selectedCurrency}`} />
-                <FearAndGreedCard value={Number(fearAndGreed?.data[0].value)} />
+                <FearAndGreedCard value={Number(fearAndGreed?.data[0].value)} value_classification={fearAndGreed.data[0].value_classification}/>
             </div>
         </div>
     )

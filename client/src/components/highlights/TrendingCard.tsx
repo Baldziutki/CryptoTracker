@@ -16,7 +16,10 @@ export default function TrendingCard({ coins, selectedCurrency }: { coins: any, 
             </div>
             <div className="grid" style={{gridTemplateColumns:'auto auto auto auto auto'}}>
                 {coins.map((item: any) => (
-                    <button className='grid grid-cols-subgrid col-start-1 col-end-[-1] py-2 items-center min-w-full gap-2 dark:hover:bg-gray-800 hover:bg-slate-200' key={item.item.id}>
+                    <a 
+                    href={`/coins/${item.item.id}`}
+                    className='grid grid-cols-subgrid col-start-1 col-end-[-1] py-2 items-center min-w-full gap-2 dark:hover:bg-gray-800 hover:bg-slate-200' 
+                    key={item.item.id}>
                         <span className='font-ligh text-left'>#{item.item.market_cap_rank}</span>
                         <img src={item.item.thumb} className=' rounded-full' style={{ width: '24px', height: '24px', }} />
                         <div className="grid grid-flow-row" >
@@ -25,7 +28,7 @@ export default function TrendingCard({ coins, selectedCurrency }: { coins: any, 
                         </div>
                         <span className=' text-right'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(item.item.data.price)}</span>
                         <RenderPercentage number={item.item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center justify-end' />
-                    </button>
+                    </a>
                 ))}
             </div>
         </div>

@@ -11,9 +11,9 @@ export default function Navbar() {
     return (
         <div className="flex flex-row pt-2">
             <div className="flex flex-row items-center justify-center gap-6">
-                <span>Cryptocurrencies</span>
-                <span>Exchanges</span>
-                <span>Wallet</span>
+                <a href="/">Cryptocurrencies</a>
+                <a href="/exchanges">Exchanges</a>
+                <a>Wallet</a>
             </div>
             <div className="grow" />
             <SearchButton setIsOpen={setIsOpen}/>

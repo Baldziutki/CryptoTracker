@@ -3,7 +3,7 @@
 import type React from "react";
 import { useState, useEffect, useContext } from "react"
 import { Button, AlertDialog } from "@radix-ui/themes"
-import { getSupportedCurrencies } from "@/utils/api/fetchFromCoinGecko";
+import { getSupportedCurrencies } from "@/utils/api/fetchFromServer";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 
 interface CurrencyPickerProps {
