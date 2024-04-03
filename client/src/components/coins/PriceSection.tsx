@@ -44,7 +44,7 @@ export default function PriceSection(props: PriceSection) {
                 <RenderPercentage number={price_change_24h_to_bitcoin} _class="flex items-center text-sm" />
             </div>
             <div>
-                {high_24h ? <Progress value={(Math.abs(high_24h - price) /Math.abs(price - low_24h))} /> : <Progress value={0}/>}
+                {high_24h ? <Progress value={(Math.abs(high_24h - price) /Math.abs(price - low_24h))*100} /> : <Progress value={0}/>}
                 <div className="flex items-center justify-between text-sm font-medium">
                     <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(low_24h)}</span>
                     <span>24h Range</span>
