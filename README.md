@@ -1,6 +1,6 @@
 # CryptoTracker
 
-CryptoTracker is a cryptocurrency tracking application built with TypeScript, Next.js, Tailwind CSS, and Radix UI for the frontend, and Fastify with TypeScript for the backend. It provides real-time data on various cryptocurrencies using the CoinGecko API.
+CryptoTracker is a cryptocurrency tracking application built with TypeScript, Next.js, Tailwind CSS, and Radix UI for the frontend. Node.js, Fastify and TypeScript for the backend. It provides real-time data on various cryptocurrencies using the CoinGecko API.
 
 ## Features
 
@@ -21,7 +21,7 @@ CryptoTracker is a cryptocurrency tracking application built with TypeScript, Ne
 - **Backend:**
   - ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
   - ![Fastify](https://img.shields.io/badge/-Fastify-000000?style=flat-square&logo=fastify&logoColor=white)
-
+  - ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
 
 ## Usage
 
