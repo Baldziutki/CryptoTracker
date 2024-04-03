@@ -1,12 +1,15 @@
 'use client'
 import type React from "react";
 import { createContext, useState, useEffect } from "react";
+import { getSession } from "../api/fetchFromServer";
 
 export const GlobalDataContext = createContext<{
     selectedCurrency: string;
     selectCurrency: (value: string) => void;
     theme: string;
     toggleTheme: () => void;
+    loggedIn: boolean;
+    setLoggedIn: (value: boolean | { (value: boolean): boolean }) => void;
 }>(undefined as never);
 
 export function GlobalDataContextProvider({ children }: { children: React.ReactNode }) {
@@ -18,19 +21,21 @@ export function GlobalDataContextProvider({ children }: { children: React.ReactN
         return 'usd';
     });
 
-    const selectCurrency = (currency: string) => {
-        setSelectedCurrency(currency);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('currency', currency);
-        }
-    }
-
     const [theme, setTheme] = useState<'light' | 'dark'>(() => {
         if (typeof window !== 'undefined') {
             return localStorage.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         }
         return 'light';
     });
+
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
+    const selectCurrency = (currency: string) => {
+        setSelectedCurrency(currency);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('currency', currency);
+        }
+    }
 
     const toggleTheme = () => {
         setTheme((prevTheme) => prevTheme === 'dark' ? 'light' : 'dark');
@@ -47,8 +52,19 @@ export function GlobalDataContextProvider({ children }: { children: React.ReactN
         }
     }, [theme]);
 
+    useEffect(() => {
+        (async() => {
+            const authResponse = await getSession();
+            if(!authResponse){
+               setLoggedIn(authResponse);
+            } else {
+                setLoggedIn(true);
+            }
+        })();
+    },[])
+
     return (
-        <GlobalDataContext.Provider value={{ selectedCurrency, selectCurrency, theme, toggleTheme }}>
+        <GlobalDataContext.Provider value={{ selectedCurrency, selectCurrency, theme, toggleTheme, loggedIn, setLoggedIn }}>
             {children}
         </GlobalDataContext.Provider>
     )
