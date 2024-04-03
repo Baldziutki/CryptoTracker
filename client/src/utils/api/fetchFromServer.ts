@@ -7,11 +7,7 @@ export const register = async (email: string, password: string) => {
             email,
             password,
         }
-    }, process.env.PUBLIC_BACKEND_URL);
-
-    if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
+    }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
     return response.json;
 };
@@ -23,11 +19,7 @@ export const logIn = async (email: string, password: string) => {
             email,
             password,
         }
-    }, process.env.PUBLIC_BACKEND_URL);
-
-    if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
+    }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
     return response.json;
 };
@@ -37,7 +29,7 @@ export const getSession = async () => {
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
     if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
+        return false;
     }
 
     return response.json;
