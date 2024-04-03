@@ -4,14 +4,14 @@ import bcrypt from 'bcrypt';
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
 
-  fastify.post<{ Body: UserType, Reply: string }>(
+  fastify.post<{ Body: UserType, Reply: {message:string, statusCode: number} }>(
     '/register', {
     schema: {
       body: User,
     },
     errorHandler: (error, _request, reply) => {
       if (error.code as unknown as number === 11000) {
-        reply.code(409).send("Account with given email already exists!")
+        reply.code(409).send({message:"Account with given email already exists!",statusCode:409})
         return
       }
       fastify.errorHandler(error, _request, reply)
@@ -22,7 +22,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       const hashPassword = await bcrypt.hash(password, 10);
 
       if (email?.length > 128 || password.length > 128) {
-        return reply.code(422).send("Email or password too long!");
+        return reply.code(422).send({message:"Email or password too long!", statusCode:422});
       }
       const user = {
         email: email,
@@ -34,11 +34,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
       await fastify.mongo.db?.collection('users').insertOne(user);
 
-      reply.code(201).send("Registered successfully!");
+      reply.code(201).send({message:"Registered successfully!", statusCode:201});
     }
   );
 
-  fastify.post<{ Body: UserType, Reply: string }>(
+  fastify.post<{ Body: UserType, Reply: {message:string, statusCode: number} }>(
     '/login', {
     schema: {
       body: User,
@@ -49,7 +49,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       const user = await fastify.mongo.db?.collection('users').findOne({ email });
 
       if (!user) {
-        return reply.code(404).send("User not found!");
+        return reply.code(404).send({message:"User not found!", statusCode: 404});
       }
 
       const validPassowrd = await bcrypt.compare(password, user['password']);
@@ -66,9 +66,9 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
             expires: new Date(Date.now() + 86400 * 1000)
           })
           .code(200)
-          .send("logged in!")
+          .send({message:"logged in!", statusCode: 200})
       } else {
-        return reply.code(404).send("Wrong password");
+        return reply.code(404).send({message:"Wrong password", statusCode: 404});
       }
     }
   );
