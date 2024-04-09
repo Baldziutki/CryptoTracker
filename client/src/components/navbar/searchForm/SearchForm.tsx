@@ -86,7 +86,6 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                 <TextField.Root
                     placeholder="Search" variant="soft" color="gray" radius="large"
                     onChange={(e) => searchDebounce(() => searchCoin(e.target.value))}
-                    onClick={() => { console.log('click') }}
                     onBlur={() => { setIsOpen(false) }}
                     autoFocus={isOpen}>
                     <TextField.Slot>

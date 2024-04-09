@@ -83,7 +83,7 @@ export default function AuthForm({ isOpen, setIsOpen, whichForm, setWhichForm }:
                             <Text as="div" size="2" mb="1" weight="bold">
                                 Email
                             </Text>
-                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2"
+                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2 dark:text-black"
                                 placeholder="Enter your email"
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -92,7 +92,7 @@ export default function AuthForm({ isOpen, setIsOpen, whichForm, setWhichForm }:
                             <Text as="div" size="2" mb="1" weight="bold">
                                 Password
                             </Text>
-                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2"
+                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2 dark:text-black"
                                 placeholder="Enter your password"
                                 type='password'
                                 onChange={(e) => setPassword(e.target.value)}
@@ -122,7 +122,7 @@ export default function AuthForm({ isOpen, setIsOpen, whichForm, setWhichForm }:
                             <Text as="div" size="2" mb="1" weight="bold">
                                 Email
                             </Text>
-                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2"
+                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2 dark:text-black"
                                 placeholder="Enter your email"
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -131,7 +131,7 @@ export default function AuthForm({ isOpen, setIsOpen, whichForm, setWhichForm }:
                             <Text as="div" size="2" mb="1" weight="bold">
                                 Password
                             </Text>
-                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2"
+                            <input className="w-full h-8 border-2 text-sm focus:border-blue-400 outline-none rounded-md pl-2 dark:text-black"
                                 placeholder="Enter your password"
                                 type='password'
                                 onChange={(e) => setPassword(e.target.value)}

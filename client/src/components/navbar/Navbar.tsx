@@ -13,7 +13,7 @@ export default function Navbar() {
             <div className="flex flex-row items-center justify-center gap-6">
                 <a href="/">Cryptocurrencies</a>
                 <a href="/exchanges">Exchanges</a>
-                <a>Wallet</a>
+                <a href="/wallet">Wallet</a>
             </div>
             <div className="grow" />
             <SearchButton setIsOpen={setIsOpen}/>

@@ -12,7 +12,7 @@ export default function AccountMenu() {
     const {setLoggedIn} = useContext(GlobalDataContext);
 
     const handleLogOutButton = async () => {
-        const logOutResponse = await logOut();
+        await logOut();
         setLoggedIn(false);
     }
 

@@ -98,10 +98,10 @@ export default function Coin() {
 
     return (
         <div className="flex flex-col container mx-auto 2xl:max-w-screen-xl pt-2 gap-8">
-            <div className="">
+            <div>
                 <Breadcrumbs.Root>
-                    <Breadcrumbs.Item name='Cryptocurencies' link='/' className="font-medium" />
-                    <Breadcrumbs.Item name={params.slug} className="font-light capitalize" />
+                    <Breadcrumbs.Item name='Cryptocurencies' link='/' className="font-medium hover:text-green-400" />
+                    <Breadcrumbs.Item name={params.slug} className="text-slate-400 capitalize" />
                 </Breadcrumbs.Root>
                 <PriceSection {...priceData} />
                 <div className="grid grid-cols-2 gap-4">
