@@ -13,23 +13,23 @@ export default function Navbar() {
             <div className="flex flex-row items-center justify-center gap-6">
                 <a href="/">
                     <div className="flex flex-row items-center gap-1">
-                        <BitcoinFill strokeWidth={2} size={24} />
+                        <BitcoinFill strokeWidth={2} size={24} color="orange"/>
                         <span>Cryptocurrencies</span>
                     </div>
                 </a>
                 <a href="/exchanges">
                     <div className="flex flex-row items-center gap-1">
                         <div className="flex flex-row">
-                        <Coin strokeWidth={2} size={24} />
-                        <ArrowRightLeft strokeWidth={2} size={24} />
-                        <BitcoinFill strokeWidth={2} size={24} />
+                            <Coin strokeWidth={2} size={24} color="green" className="text-white"/>
+                            <ArrowRightLeft strokeWidth={2} size={24} />
+                            <BitcoinFill strokeWidth={2} size={24} color="orange"/>
                         </div>
                         Exchanges
                     </div>
                 </a>
                 <a href="/wallet">
                     <div className="flex flex-row items-center gap-1">
-                        <Wallet strokeWidth={2} size={24} />
+                        <Wallet strokeWidth={2} size={24} color="blue" />
                         <span>Wallet</span>
                     </div>
                 </a>

@@ -1,3 +1,4 @@
+'use client'
 import { ChevronRightIcon } from "@radix-ui/react-icons"
 import { ReactElement, Fragment } from "react"
 

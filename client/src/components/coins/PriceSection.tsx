@@ -23,7 +23,14 @@ export default function PriceSection(props: PriceSection) {
     const { selectedCurrency } = useContext(GlobalDataContext);
     const { image, name, symbol, market_cap_rank, price, price_change, low_24h, high_24h, current_price_to_bitcoin, price_change_24h_to_bitcoin } = props;
 
-
+    const calculateRatio = (price: number, high: number, low: number) => {
+        const ratio = (Math.abs(price - low_24h) / Math.abs(high_24h - price));
+        if (ratio <= 1) {
+            return ratio * 100;
+        } else {
+            return (Math.abs(high_24h - price) / Math.abs(price - low_24h)) * 100;
+        }
+    }
 
     return (
         <div className="pt-2 ">
@@ -44,7 +51,7 @@ export default function PriceSection(props: PriceSection) {
                 <RenderPercentage number={price_change_24h_to_bitcoin} _class="flex items-center text-sm" />
             </div>
             <div>
-                {high_24h ? <Progress value={(Math.abs(high_24h - price) /Math.abs(price - low_24h))*100} /> : <Progress value={0}/>}
+                {high_24h ? <Progress value={calculateRatio(price,high_24h,low_24h)} /> : <Progress value={0} />}
                 <div className="flex items-center justify-between text-sm font-medium">
                     <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(low_24h)}</span>
                     <span>24h Range</span>
