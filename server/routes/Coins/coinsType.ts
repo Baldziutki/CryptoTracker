@@ -1,12 +1,13 @@
 import { Static, Type } from '@sinclair/typebox'
 
-export const CoinAdd = Type.Object({
+export const Coin = Type.Object({
   coinId: Type.String(),
   coinName: Type.String(),
   coinAmount: Type.Number(),
-  coinAddDate: Type.Optional(Type.String())
+  coinAddDate: Type.Optional(Type.String()),
+  coinAddDateValue: Type.Number(),
 });
-export type CoinAddType = Static<typeof CoinAdd>;
+export type CoinType = Static<typeof Coin>;
 
 export const CoinDelete = Type.Object({
   coinId: Type.String(),
@@ -15,16 +16,8 @@ export const CoinDelete = Type.Object({
 });
 export type CoinDeleteType = Static<typeof CoinDelete>;
 
-export const UserCoins = Type.Object({
-  coins: Type.Array(
-    Type.Object({
-      coinId: Type.String(),
-      coinName: Type.String(),
-      coinAmount: Type.Number(),
-      coinAddDate: Type.Optional(Type.String()),
-    })
-  ),
-});
+export const UserCoins = Type.Array(Coin);
+
 export type UserCoinsType = Static<typeof UserCoins>;
 
 export const FavoriteCoin = Type.Object({
@@ -33,13 +26,6 @@ export const FavoriteCoin = Type.Object({
 });
 export type FavoriteCoinType = Static<typeof FavoriteCoin>;
 
-export const FavoriteUserCoins = Type.Object({
-  favoriteCoins: Type.Array(
-    Type.Object({
-      coinId: Type.String(),
-      coinName: Type.String()
-    })
-  ),
-});
+export const FavoriteUserCoins = Type.Array(FavoriteCoin);
 export type FavoriteCoinsType = Static<typeof FavoriteUserCoins>;
 

@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { FavoriteCoinType, CoinAddType, CoinDeleteType, FavoriteCoinsType, UserCoinsType, CoinAdd, CoinDelete, FavoriteCoin, UserCoins } from './coinsType.js';
+import { FavoriteCoinType, CoinType, CoinDeleteType, FavoriteCoinsType, UserCoinsType, Coin, CoinDelete, FavoriteCoin, UserCoins, FavoriteUserCoins } from './coinsType.js';
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
     fastify.addHook('onRequest', fastify.auth([fastify.verifyJWT]));
@@ -29,15 +29,15 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
     );
 
 
-    fastify.patch<{ Body: CoinAddType, Reply: string }>(
+    fastify.patch<{ Body: CoinType, Reply: string }>(
         '/addCoin', {
-            schema: {
-                body: CoinAdd,
-            }
-        },
+        schema: {
+            body: Coin,
+        }
+    },
         async (request, reply) => {
             try {
-                const { coinId, coinName, coinAmount, coinAddDate } = request.body;
+                const { coinId, coinName, coinAmount, coinAddDate, coinAddDateValue } = request.body;
                 const userEmail = (request.user as { email: string }).email;
 
                 const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
@@ -45,28 +45,20 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
                 if (user) {
                     const userCoins = user['coins'];
 
-                    const coinExistIndex = userCoins.findIndex((element: { coinId: string }) => element.coinId === coinId);
+                    const newCoin = {
+                        coinId,
+                        coinName,
+                        coinAmount,
+                        coinAddDate,
+                        coinAddDateValue
+                    };
 
-                    if (coinExistIndex !== -1) {
-                        userCoins[coinExistIndex].coinAmount += coinAmount;
+                    userCoins.push(newCoin);
 
-                        await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
+                    await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
 
-                        reply.code(200).send('Coin amount updated successfully');
-                    } else {
-                        const newCoin = {
-                            coinId,
-                            coinName,
-                            coinAmount,
-                            coinAddDate,
-                        };
+                    reply.code(200).send('Coin added successfully');
 
-                        userCoins.push(newCoin);
-
-                        await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
-
-                        reply.code(200).send('New coin added successfully');
-                    }
                 } else {
                     reply.code(404).send('User not found');
                 }
@@ -78,10 +70,10 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
     fastify.delete<{ Body: CoinDeleteType, Reply: String }>(
         '/deleteCoin', {
-            schema: {
-                body: CoinDelete,
-            }
-        },
+        schema: {
+            body: CoinDelete,
+        }
+    },
         async (request, reply) => {
             try {
                 const { coinId, coinAmount } = request.body;
@@ -123,12 +115,12 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
     fastify.get<{ Reply: FavoriteCoinsType | string }>(
         '/getFavoriteCoins', {
-            schema: {
-                response: {
-                    201: FavoriteCoin
-                }
+        schema: {
+            response: {
+                201: FavoriteUserCoins
             }
-        },
+        }
+    },
         async (request, reply) => {
             const userEmail = (request.user as { email: string }).email;
 
@@ -137,7 +129,6 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
             if (!user) {
                 return reply.code(404).send("User not found!");
             };
-
             return reply.code(201).send(user?.['favoriteCoins']);
 
         }
@@ -145,10 +136,10 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
     fastify.patch<{ Body: FavoriteCoinType, Reply: string }>(
         '/addFavoriteCoin', {
-            schema: {
-                body: FavoriteCoin,
-            }
-        },
+        schema: {
+            body: FavoriteCoin,
+        }
+    },
         async (request, reply) => {
 
             const { coinId, coinName } = request.body;
@@ -177,10 +168,10 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
     fastify.delete<{ Body: FavoriteCoinType, Reply: string }>(
         '/deleteFavoriteCoin', {
-            schema: {
-                body: FavoriteCoin,
-            }
-        },
+        schema: {
+            body: FavoriteCoin,
+        }
+    },
         async (request, reply) => {
             const { coinId } = request.body;
 
