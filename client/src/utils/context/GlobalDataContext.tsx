@@ -53,15 +53,15 @@ export function GlobalDataContextProvider({ children }: { children: React.ReactN
     }, [theme]);
 
     useEffect(() => {
-        (async() => {
+        (async () => {
             const authResponse = await getSession();
-            if(!authResponse){
-               setLoggedIn(authResponse);
+            if (!authResponse) {
+                setLoggedIn(authResponse);
             } else {
                 setLoggedIn(true);
             }
         })();
-    },[])
+    }, [])
 
     return (
         <GlobalDataContext.Provider value={{ selectedCurrency, selectCurrency, theme, toggleTheme, loggedIn, setLoggedIn }}>
