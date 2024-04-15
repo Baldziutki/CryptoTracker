@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect, useContext } from "react";
-import { getGlobalMarketData } from "@/utils/api/fetchFromServer";
+import { addFavoriteCoin, deleteFavoriteCoin, getFavoriteCoins, getGlobalMarketData } from "@/utils/api/fetchFromServer";
 import { useSearchParams } from "next/navigation";
 import { getCoinsMarketData } from "@/utils/api/fetchFromCoinGecko";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import { RenderPercentage } from "../renderPercentage/RenderPercentage";
 import Pagination from "../pagination/Pagination";
+import { Star } from "akar-icons";
 
 interface coinsAmountData {
     amount: number,
@@ -31,15 +32,21 @@ interface Filter {
     key: keyof CoinMarketData,
     isHighest: boolean,
 }
+
+interface FavoriteCoin{
+    coinName:string,
+    coinId:string,
+}
+
 export default function Cryptocurrencies() {
     const [coinsAmount, setCoinsAmount] = useState<coinsAmountData>({ amount: 0, pages: 1 });
     const [coins, setCoins] = useState<CoinMarketData[]>([]);
     const [filter, setFilter] = useState<Filter>({ key: 'market_cap_rank', isHighest: false });
-
+    const [favoriteCoins, setFavoriteCoins] = useState<FavoriteCoin[]>([]);
     const searchParams = useSearchParams();
     const pagination = searchParams.get('page') !== null ? parseInt(searchParams.get('page')!) : 1;
 
-    const { selectedCurrency } = useContext(GlobalDataContext);
+    const { selectedCurrency, loggedIn } = useContext(GlobalDataContext);
 
     const extractImageNumber = (imageString: string) => {
         const regex = /\/images\/(\d+)\/large\//;
@@ -88,6 +95,31 @@ export default function Cryptocurrencies() {
         setCoins(sortedCoins);
     }
 
+    const isFavorite = (coinName: string) => {
+        return favoriteCoins.some((coin: any) => coin.coinName === coinName);
+    };
+
+    const handleFavoriteButton = async (coinName: string, coinId: string) => {
+        const isFavorite = favoriteCoins.some((coin: FavoriteCoin) => coin.coinName === coinName);
+    
+        if (isFavorite) {
+            const updatedFavoriteCoins = favoriteCoins.filter((coin: FavoriteCoin) => coin.coinName !== coinName);
+            setFavoriteCoins(updatedFavoriteCoins);
+            await deleteFavoriteCoin(coinId);
+    
+        } else {
+            
+            const newFavoriteCoin = {
+                coinId: coinId,
+                coinName: coinName,
+               
+            };
+            const updatedFavoriteCoins = [...favoriteCoins, newFavoriteCoin];
+            setFavoriteCoins(updatedFavoriteCoins);
+            await addFavoriteCoin(coinId, coinName);
+        }
+    };
+
     useEffect(() => {
         setCoins([]);
         (async () => {
@@ -113,8 +145,13 @@ export default function Cryptocurrencies() {
             }));
             setCoins(coinsMarketData);
             setCoinsAmount(coinsAmountData);
+            if (loggedIn) {
+                const fetchedFavoriteCoins = await getFavoriteCoins();
+                console.log(fetchedFavoriteCoins);
+                setFavoriteCoins(fetchedFavoriteCoins);
+            }
         })();
-    }, [selectedCurrency,pagination]);
+    }, [selectedCurrency, pagination, loggedIn]);
 
 
     return (
@@ -123,6 +160,7 @@ export default function Cryptocurrencies() {
                 <table className="w-full divide-y divide-gray-200 dark:divide-slate-800">
                     <thead className="sticky top-0 bg-gray-50 dark:bg-slate-950">
                         <tr>
+                            <th></th>
                             <th className="px-6 py-3 text-left">
                                 <button className="text-xs font-medium text-gray-500 dark:text-slate-50 uppercase" onClick={() => switchFilter('market_cap_rank')}>#</button>
                             </th>
@@ -153,6 +191,11 @@ export default function Cryptocurrencies() {
                     <tbody className="divide-y divide-gray-200 dark:divide-slate-800">
                         {coins.map((item: CoinMarketData) => (
                             <tr key={item.symbol}>
+                                <td className="px-2">
+                                    <button onClick={loggedIn ? (() => handleFavoriteButton(item.name, item.id)) : ()=>alert('You have to bo logged in!')}>
+                                        <Star strokeWidth={2} size={12} color={isFavorite(item.name) ? 'orange' : 'currentColor'} />
+                                    </button>
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap">{item.market_cap_rank}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <a className="flex items-center" href={`/coins/${item.id}`}>
