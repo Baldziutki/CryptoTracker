@@ -23,6 +23,17 @@ export const getCoinsMarketData = async (currency: string, per_page: Number, pag
     return response.json as any[];
 };
 
+export const getGivenCoinsMarketData = async (currency: string, coins: string) => {
+    const response = await json(`coins/markets?vs_currency=${currency}&ids=${coins}&price_change_percentage=1h%2C24h%2C7d`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
+        process.env.NEXT_PUBLIC_COINGECKO_API_URL, true);
+
+    if (!response.ok || response.json === undefined) {
+        throw new Error(`${response.status} - ${response.json?.error}`);
+    }
+
+    return response.json as any[];
+};
+
 export const getCurrentCoinData = async (coinId: string) => {
     const response = await json(`coins/${coinId}?localization=false&tickers=false&community_data=false&developer_data=false`, { headers: { 'x-cg-demo-api-key': `${process.env.NEXT_PUBLIC_COINGECKO_API_KEY}` } },
         process.env.NEXT_PUBLIC_COINGECKO_API_URL, true);
@@ -110,3 +121,5 @@ export const getExchangesData = async ( per_page: Number, page: Number) => {
 
     return response.json as any[];
 };
+
+

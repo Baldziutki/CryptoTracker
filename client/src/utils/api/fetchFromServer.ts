@@ -88,7 +88,7 @@ export const getWalletCoins = async () => {
 };
 
 export const addCoinToWallet = async (coinId: string,
-    coinName: string, coinAmount: number, coinAddDate?: string,) => {
+    coinName: string, coinAmount: number, coinAddDate: string, coinAddDateValue: number) => {
     const response = await json('/addCoin', {
         method: 'PATCH',
         body: {
@@ -96,10 +96,11 @@ export const addCoinToWallet = async (coinId: string,
             coinName,
             coinAmount,
             coinAddDate,
+            coinAddDateValue,
         }
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
-
-    if (!response.ok || response.json === undefined) {
+    console.log(response.json)
+    if (!response.ok) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 
@@ -123,7 +124,7 @@ export const getFavoriteCoins = async () => {
     const response = await json('/getFavoriteCoins', {
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
+    if (!response.ok) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 
@@ -137,7 +138,7 @@ export const addFavoriteCoin = async (coinId: string, coinName?: string) => {
         body: { coinId, coinName },
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
+    if (!response.ok) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 
@@ -150,7 +151,7 @@ export const deleteFavoriteCoin = async (coinId: string) => {
         body: { coinId },
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
+    if (!response.ok) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 
