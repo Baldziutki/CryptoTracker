@@ -38,6 +38,7 @@ export default function Coin() {
             const fetchedCurrentCoinData = await getCurrentCoinData(params.slug);
             const filteredPriceData = {
                 image: fetchedCurrentCoinData.image.large,
+                id: fetchedCurrentCoinData.id,
                 name: fetchedCurrentCoinData.name,
                 symbol: fetchedCurrentCoinData.symbol,
                 market_cap_rank: fetchedCurrentCoinData.market_cap_rank,

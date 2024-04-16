@@ -77,10 +77,10 @@ export const changePassword = async (password: string, newPassword: string) => {
 
 
 export const getWalletCoins = async () => {
-    const response = await json('/getCoins', {
+    const response = await json('/getTransactions', {
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
+    if (!response.ok) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 
@@ -89,7 +89,7 @@ export const getWalletCoins = async () => {
 
 export const addCoinToWallet = async (coinId: string,
     coinName: string, coinAmount: number, coinAddDate: string, coinAddDateValue: number) => {
-    const response = await json('/addCoin', {
+    const response = await json('/addTransaction', {
         method: 'PATCH',
         body: {
             coinId,
@@ -107,13 +107,27 @@ export const addCoinToWallet = async (coinId: string,
     return response.json;
 };
 
-export const deleteCoinFromWallet = async (coinId: string, coinAmount: string) => {
-    const response = await json('/deleteCoin', {
+export const deleteCoinFromWallet = async (transactionId: string) => {
+    const response = await json('/deleteTransaction', {
         method: 'DELETE',
-        body: { coinId, coinAmount },
+        body: { transactionId },
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
+    if (!response.ok) {
+        throw new Error(`${response.status} - ${response.json?.error}`);
+    }
+
+    return response.json;
+};
+
+export const editTransaction = async (transactionId: string, coinId: string,
+    coinName: string, coinAmount: number, coinAddDate: string, coinAddDateValue: number) => {
+    const response = await json('/editTransaction', {
+        method: 'PATCH',
+        body: { transactionId, coinId, coinName, coinAmount, coinAddDate, coinAddDateValue },
+    }, process.env.NEXT_PUBLIC_BACKEND_URL);
+
+    if (!response.ok) {
         throw new Error(`${response.status} - ${response.json?.error}`);
     }
 

@@ -42,6 +42,7 @@ export default function AddCoinButton() {
         if (input !== '') {
             (async () => {
                 const fetchedSearchCoins = await getSearchCoins(input);
+                console.log(fetchedSearchCoins)
                 setSearchedCoins(fetchedSearchCoins);
             })();
         } else {

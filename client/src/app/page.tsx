@@ -6,7 +6,7 @@ export default function Home() {
 
   return (
     <div>
-      <main className="container mx-auto 2xl:max-w-screen-xl">
+      <main className="">
         <Highlights />
         <Cryptocurrencies />
       </main>

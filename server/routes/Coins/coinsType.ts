@@ -1,24 +1,32 @@
 import { Static, Type } from '@sinclair/typebox'
 
-export const Coin = Type.Object({
+export const Transaction = Type.Object({
+  transactionId: Type.String(),
   coinId: Type.String(),
   coinName: Type.String(),
   coinAmount: Type.Number(),
   coinAddDate: Type.Optional(Type.String()),
   coinAddDateValue: Type.Number(),
 });
-export type CoinType = Static<typeof Coin>;
+export type TransactionType = Static<typeof Transaction>;
 
-export const CoinDelete = Type.Object({
+export const AddTransaction = Type.Object({
   coinId: Type.String(),
   coinName: Type.String(),
   coinAmount: Type.Number(),
+  coinAddDate: Type.Optional(Type.String()),
+  coinAddDateValue: Type.Number(),
 });
-export type CoinDeleteType = Static<typeof CoinDelete>;
+export type AddTransactionType = Static<typeof AddTransaction>;
 
-export const UserCoins = Type.Array(Coin);
+export const TransactionDelete = Type.Object({
+  transactionId: Type.String(),
+});
+export type TransactionDeleteType = Static<typeof TransactionDelete>;
 
-export type UserCoinsType = Static<typeof UserCoins>;
+export const UserTransactions = Type.Array(Transaction);
+
+export type UserTransactionsType = Static<typeof UserTransactions>;
 
 export const FavoriteCoin = Type.Object({
   coinId: Type.String(),

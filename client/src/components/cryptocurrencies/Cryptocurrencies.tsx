@@ -155,7 +155,7 @@ export default function Cryptocurrencies() {
 
 
     return (
-        <div className="pt-2">
+        <div className="pt-2 container mx-auto 2xl:max-w-screen-xl">
             <div className="max-xl:overflow-x-auto">
                 <table className="w-full divide-y divide-gray-200 dark:divide-slate-800">
                     <thead className="sticky top-0 bg-gray-50 dark:bg-slate-950">

@@ -27,7 +27,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       const user = {
         email: email,
         password: hashPassword,
-        coins: [],
+        transactions: [],
         favoriteCoins: [],
         balance: 0
       };

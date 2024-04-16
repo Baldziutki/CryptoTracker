@@ -26,8 +26,8 @@ export default function RootLayout({
         <Theme>
           <GlobalDataContextProvider>
             <>
-              <header className="container mx-auto 2xl:max-w-screen-xl">
-                <div className=" border-b pb-5 pt-2 dark:border-b-slate-700">
+              <header className="container mx-auto md:max-w-screen-xl">
+                <div className=" border-b pb-5 pt-2 dark:border-b-slate-700 ">
                   <Header />
                 </div>
                 <div className=" border-b pb-5 pt-2 dark:border-b-slate-700">

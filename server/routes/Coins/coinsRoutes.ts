@@ -1,15 +1,15 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { FavoriteCoinType, CoinType, CoinDeleteType, FavoriteCoinsType, UserCoinsType, Coin, CoinDelete, FavoriteCoin, UserCoins, FavoriteUserCoins } from './coinsType.js';
+import { FavoriteCoinType, TransactionType, TransactionDeleteType, FavoriteCoinsType, UserTransactionsType, TransactionDelete, Transaction,FavoriteCoin, UserTransactions, FavoriteUserCoins, AddTransaction, AddTransactionType } from './coinsType.js';
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
     fastify.addHook('onRequest', fastify.auth([fastify.verifyJWT]));
 
 
-    fastify.get<{ Reply: UserCoinsType | string }>(
-        '/getCoins', {
+    fastify.get<{ Reply: UserTransactionsType | string }>(
+        '/getTransactions', {
         schema: {
             response: {
-                201: UserCoins
+                201: UserTransactions
             }
         }
     },
@@ -23,16 +23,16 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
                 return reply.code(404).send("User not found!");
             };
 
-            return reply.code(201).send(user?.['coins']);
+            return reply.code(201).send(user?.['transactions']);
 
         }
     );
 
 
-    fastify.patch<{ Body: CoinType, Reply: string }>(
-        '/addCoin', {
+    fastify.patch<{ Body: AddTransactionType, Reply: string }>(
+        '/addTransaction', {
         schema: {
-            body: Coin,
+            body: AddTransaction,
         }
     },
         async (request, reply) => {
@@ -42,10 +42,17 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
                 const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
 
+                const generateTransactionId = () => {
+                    const timestamp = Date.now().toString(); 
+                    const randomNumber = Math.floor(Math.random() * 10000).toString(); 
+                    return timestamp + '-' + randomNumber; 
+                  }
+
                 if (user) {
-                    const userCoins = user['coins'];
+                    const userCoins = user['transactions'];
 
                     const newCoin = {
+                        transactionId: generateTransactionId(), 
                         coinId,
                         coinName,
                         coinAmount,
@@ -55,7 +62,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
                     userCoins.push(newCoin);
 
-                    await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
+                    await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { transactions: userCoins } });
 
                     reply.code(200).send('Coin added successfully');
 
@@ -68,47 +75,81 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
         }
     );
 
-    fastify.delete<{ Body: CoinDeleteType, Reply: String }>(
-        '/deleteCoin', {
+    fastify.delete<{ Body: TransactionDeleteType, Reply: String }>(
+        '/deleteTransaction', {
         schema: {
-            body: CoinDelete,
+            body: TransactionDelete,
         }
     },
         async (request, reply) => {
             try {
-                const { coinId, coinAmount } = request.body;
-
-                const userEmail = (request.user as { email: string }).email;
-
-                const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
-
+                const { transactionId } = request.body; 
+    
+                const userEmail = (request.user as { email: string }).email; 
+    
+                const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail }); 
+    
                 if (user) {
-
-                    const userCoins = user['coins'];
-
-                    const coinExistIndex = userCoins.findIndex((element: { coinId: string }) => element.coinId === coinId);
-
-                    if (coinExistIndex !== -1) {
-                        userCoins[coinExistIndex].coinAmount -= coinAmount;
-
-                        if (userCoins[coinExistIndex].coinAmount <= 0) {
-                            userCoins.splice(coinExistIndex, 1);
-                            await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
-                        } else {
-                            await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { coins: userCoins } });
-                        }
-
-                        reply.code(200).send('Coin amount updated successfully');
-                    } else {
-                        reply.code(200).send('Coin not found');
-                    }
-
+                    const userTransactions: TransactionType[] = user['transactions']; 
+    
+                    const updatedTransactions = userTransactions.filter(transaction => transaction.transactionId !== transactionId); 
+    
+                    await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { transactions: updatedTransactions } }); 
+    
+                    reply.code(200).send('Transaction deleted successfully'); 
                 } else {
                     reply.code(404).send('User not found');
                 }
-
             } catch (error) {
                 console.log(error);
+                reply.code(500).send('Internal Server Error');
+            }
+        }
+    );
+
+    fastify.patch<{ Body: TransactionType, Reply: string }>(
+        '/editTransaction', {
+        schema: {
+            body: Transaction,
+        }
+    },
+        async (request, reply) => {
+            try {
+                const { transactionId, coinId, coinName, coinAmount, coinAddDate, coinAddDateValue } = request.body;
+    
+                const userEmail = (request.user as { email: string }).email;
+    
+                const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
+    
+                if (user) {
+                    const userTransactions: TransactionType[] = user['transactions'];
+    
+                    const transactionIndex = userTransactions.findIndex(transaction => transaction.transactionId === transactionId);
+    
+                    if (transactionIndex !== -1) {
+                        
+                        userTransactions[transactionIndex] = {
+                            transactionId,
+                            coinId,
+                            coinName,
+                            coinAmount,
+                            coinAddDate,
+                            coinAddDateValue
+                        };
+    
+                        
+                        await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { transactions: userTransactions } });
+    
+                        reply.code(200).send('Transaction updated successfully');
+                    } else {
+                        reply.code(404).send('Transaction not found');
+                    }
+                } else {
+                    reply.code(404).send('User not found');
+                }
+            } catch (error) {
+                console.log(error);
+                reply.code(500).send('Internal Server Error');
             }
         }
     );

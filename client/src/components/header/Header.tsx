@@ -13,7 +13,7 @@ export default function Header() {
     const [whichForm, setWhichForm] = useState<string>('login');
     const { loggedIn } = useContext(GlobalDataContext);
     return (
-        <div className="flex items-center">
+        <div className="flex items-center ">
             <HeaderStats />
             <div className="grow" />
             <div className="flex gap-3">

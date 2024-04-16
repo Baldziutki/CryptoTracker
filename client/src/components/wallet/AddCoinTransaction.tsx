@@ -1,6 +1,6 @@
 'use client'
 
-import { addCoinToWallet } from "@/utils/api/fetchFromServer";
+import { addCoinToWallet, getWalletCoins } from "@/utils/api/fetchFromServer";
 import { WalletContext } from "@/utils/context/WalletContext";
 import { AlertDialog, Button, SegmentedControl, TextField } from "@radix-ui/themes"
 import { useContext, useState } from "react"
@@ -89,7 +89,9 @@ export default function AddCoinTransaction({ isOpen, coinPrice, coinName, coinId
         if (!transactionBuyData.amount) {
             newErrors.amount = "Amount is required";
         }
-
+        if (transactionSellData.amount < 0) {
+            newErrors.amount = "Amount cant be negative number";
+        }
         if (!transactionBuyData.spent) {
             newErrors.spent = "Spent is required";
         }
@@ -97,13 +99,14 @@ export default function AddCoinTransaction({ isOpen, coinPrice, coinName, coinId
         if (!transactionBuyData.date) {
             newErrors.date = "Date is required";
         }
-        if(!isValidDateFormat(transactionBuyData.date)){
+        if (!isValidDateFormat(transactionBuyData.date)) {
             newErrors.date = 'Date must be in format year-month-day'
         }
         if (Object.keys(newErrors).length === 0) {
             await addCoinToWallet(coinId, coinName, transactionBuyData.amount, transactionBuyData.date, transactionBuyData.price);
-            const newWalletTransactions = [...walletTransactions,{coinId: coinId, coinName: coinName, coinAmount: transactionBuyData.amount, coinAddDate: transactionBuyData.date, coinAddDateValue: transactionBuyData.price}];
-            setWalletTransactions(newWalletTransactions);
+            const fetchedTransactions = await getWalletCoins();
+            setWalletTransactions(fetchedTransactions);
+            onClose(false);
         } else {
             setErrors(newErrors);
         }
@@ -121,17 +124,23 @@ export default function AddCoinTransaction({ isOpen, coinPrice, coinName, coinId
         if (transactionSellData.amount > balance) {
             newErrors.amount = "Amount is higher than your current balance";
         }
+        if (transactionSellData.amount < 0) {
+            newErrors.amount = "Amount cant be negative number";
+        }
         if (!transactionSellData.received) {
             newErrors.spent = "Spent is required";
         }
         if (!transactionSellData.date) {
             newErrors.date = "Date is required";
         }
-        if(!isValidDateFormat(transactionSellData.date)){
+        if (!isValidDateFormat(transactionSellData.date)) {
             newErrors.date = 'Date must be in format year-month-day'
         }
         if (Object.keys(newErrors).length === 0) {
-
+            await addCoinToWallet(coinId, coinName, -1 * transactionSellData.amount, transactionSellData.date, transactionSellData.price);
+            const fetchedTransactions = await getWalletCoins();
+            setWalletTransactions(fetchedTransactions);
+            onClose(false);
         } else {
             setErrors(newErrors);
         }

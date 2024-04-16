@@ -1,12 +1,15 @@
 'use client'
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RenderPercentage } from "../renderPercentage/RenderPercentage";
-import { Progress, Skeleton } from "@radix-ui/themes";
+import { Progress } from "@radix-ui/themes";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
+import { Star } from "akar-icons";
+import { addFavoriteCoin, deleteFavoriteCoin, getFavoriteCoins } from "@/utils/api/fetchFromServer";
 
 
 interface PriceSection {
     image: string,
+    id: string,
     name: string,
     symbol: string,
     market_cap_rank: number
@@ -20,9 +23,9 @@ interface PriceSection {
 
 export default function PriceSection(props: PriceSection) {
 
-    const { selectedCurrency } = useContext(GlobalDataContext);
-    const { image, name, symbol, market_cap_rank, price, price_change, low_24h, high_24h, current_price_to_bitcoin, price_change_24h_to_bitcoin } = props;
-
+    const { selectedCurrency, loggedIn } = useContext(GlobalDataContext);
+    const { image, id, name, symbol, market_cap_rank, price, price_change, low_24h, high_24h, current_price_to_bitcoin, price_change_24h_to_bitcoin } = props;
+    const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const calculateRatio = (price: number, high: number, low: number) => {
         const ratio = (Math.abs(price - low_24h) / Math.abs(high_24h - price));
         if (ratio <= 1) {
@@ -32,14 +35,50 @@ export default function PriceSection(props: PriceSection) {
         }
     }
 
+    const handleFavoriteButton = async (coinName: string, coinId: string) => {
+        const fetchedFavoriteCoins = await getFavoriteCoins();
+        if (isFavorite) {
+
+            const updatedFavoriteCoins = fetchedFavoriteCoins.filter((coin: any) => coin.coinName !== coinName);
+            setIsFavorite(false);
+            await deleteFavoriteCoin(coinId);
+
+        } else {
+
+            const newFavoriteCoin = {
+                coinId: coinId,
+                coinName: coinName,
+
+            };
+            const updatedFavoriteCoins = [...fetchedFavoriteCoins, newFavoriteCoin];
+           setIsFavorite(true);
+            await addFavoriteCoin(coinId, coinName);
+        }
+    };
+
+    useEffect(() => {
+        (async () => {
+            if (loggedIn) {
+                const fetchedFavoriteCoins = await getFavoriteCoins();
+                const favorite = fetchedFavoriteCoins.find((item: any) => item.coinName === name);
+                if (favorite) {
+                    setIsFavorite(true);
+                    console.log('is')
+                }
+            }
+        })();
+    }, [loggedIn])
+
     return (
         <div className="pt-2 ">
             <div className="flex flex-row justify-evenly">
                 <div className="flex items-center gap-1">
                     <img src={image} className="w-12 h-12 rounded-full" />
                     <span className="text-5xl text font-medium">{name}</span>
-                    <span className="text-lg text-gray-500">{symbol} Price</span>
+                    <span className="text-lg text-gray-500 uppercase">{symbol}</span>
+                    <span className="text-lg text-gray-500">Price</span>
                     <span className="text-lg bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
+                    <button onClick={() => handleFavoriteButton(name, id)}><Star strokeWidth={1} size={20} className={isFavorite ? 'fill-orange-400' : ''} /></button>
                 </div>
                 <div className="flex justify-center">
                     <span className="text-4xl font-bold">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(price)}</span>
@@ -51,7 +90,7 @@ export default function PriceSection(props: PriceSection) {
                 <RenderPercentage number={price_change_24h_to_bitcoin} _class="flex items-center text-sm" />
             </div>
             <div>
-                {high_24h ? <Progress value={calculateRatio(price,high_24h,low_24h)} /> : <Progress value={0} />}
+                {high_24h ? <Progress value={calculateRatio(price, high_24h, low_24h)} /> : <Progress value={0} />}
                 <div className="flex items-center justify-between text-sm font-medium">
                     <span>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(low_24h)}</span>
                     <span>24h Range</span>
