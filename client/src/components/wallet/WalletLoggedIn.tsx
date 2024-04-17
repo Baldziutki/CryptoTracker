@@ -57,7 +57,7 @@ export default function WalletLoggedIn() {
 
     return (
         <div>
-            <div className="flex flex-row justify-between pt-2">
+            <div className="flex flex-row justify-between pt-2 max-md:flex-col">
                 <WalletOverview
                     balance={portfolioBalance}
                     portfolioChangeAmount={portfolioChange.amount} portfolioChangePercentage={portfolioChange.percentage}

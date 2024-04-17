@@ -73,11 +73,9 @@ export default function Highlights() {
     return (
         <div className='pt-2'>
             <div className='flex flex-col'>
-                <span className='font-extrabold text-2xl'>Cryptocurrency Prices by Market Cap</span>
-                <div className='flex flex-row gap-1'>
-                    <span className='text-sm'>The global cryptocurrency market cap today is <MarketCapDivider number={globalMarketData.marketCap} currency={selectedCurrency}/>, a</span>
-                    <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' />
-                    <span>change in the last 24 hours</span>
+                <span className='font-extrabold text-2xl max-md:text-base'>Cryptocurrency Prices by Market Cap</span>
+                <div className='gap-1 max-md:gap-0 max-md:text-sm items-center'>
+                    The global cryptocurrency market cap today is <MarketCapDivider number={globalMarketData.marketCap} currency={selectedCurrency} />, a <RenderPercentage number={globalMarketData.percentage} /> change in the last 24 hours
                 </div>
             </div>
             <div className="grid xl:grid-flow-col 2xl:grid-cols-3  pt-4 gap-2 ">

@@ -14,7 +14,7 @@ interface WalletOverviewProps {
 export default function WalletOverview({ balance, portfolioChangeAmount, portfolioChangePercentage, totalProfitAmount, totalProfitPercentage }: WalletOverviewProps) {
 
     return (
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 max-md:flex-col max-md:pb-4">
             <div className="flex flex-col shadow-xl dark:bg-slate-800 p-6 rounded-md">
                 <FormatNumber number={balance} currency={'usd'} />
                 <span>Total Balance</span>

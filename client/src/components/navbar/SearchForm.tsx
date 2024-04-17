@@ -80,7 +80,6 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
     }, [])
 
     return (
-
         <div className='relative flex flex-col'>
             <div className='dark:bg-slate-800 bg-white absolute right-0 rounded drop-shadow-lg' style={{ zIndex: 999, height: 440, width: 450 }}>
                 <TextField.Root
@@ -93,10 +92,10 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                     </TextField.Slot>
                 </TextField.Root>
                 <ScrollArea type="always" scrollbars="vertical" style={{ height: 280 }}>
-                    <div className='flex flex-col'>
+                    <div className='grid' style={{ gridTemplateColumns: 'auto auto auto auto auto auto' }}>
                         {searchedCoins.length ? (
                             searchedCoins.map((item: any) => (
-                                <button className='flex flex-row px-4 py-2 items-center justify-center gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.id} onMouseOver={() => { setSelectedCoin(item) }}>
+                                <button className='grid grid-cols-subgrid col-start-1 col-end-[-1] px-4 py-2 gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.id} onMouseOver={() => { setSelectedCoin(item) }}>
                                     <img src={item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                                     <span className='font-medium'> {item.name}</span>
                                     <span className='text-xs text-slate-400'>{item.symbol}</span>
@@ -107,7 +106,7 @@ export default function SearchForm({ isOpen, setIsOpen }: SearchFormProps) {
                             ))
                         ) : (
                             coins.map((item: any) => (
-                                <button className='flex flex-row px-4 py-2 items-center justify-center gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.item.id} onMouseOver={() => { setSelectedCoin(item.item) }}>
+                                <button className='grid grid-cols-subgrid col-start-1 col-end-[-1] px-4 py-2  gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.item.id} onMouseOver={() => { setSelectedCoin(item.item) }}>
                                     <img src={item.item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                                     <span className='font-medium'> {item.item.name}</span>
                                     <span className='text-xs text-slate-400'>{item.item.symbol}</span>

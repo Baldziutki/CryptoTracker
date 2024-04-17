@@ -16,11 +16,12 @@ export default function Wallet() {
         <WalletContextProvider>
             <div>
                 <main className="container mx-auto 2xl:max-w-screen-xl">
-                    <div className="flex justify-between pt-2">
+                    <div className="flex pt-2 ">
                         <Breadcrumbs.Root>
                             <Breadcrumbs.Item name="Cryptocurrencies" link="/" className="font-medium hover:text-green-400" />
                             <Breadcrumbs.Item name="Wallet" className="text-slate-400" />
                         </Breadcrumbs.Root>
+                        <div className="grow"/>
                         {loggedIn ? <AddCoinButton /> : null}
                     </div>
                     {loggedIn ? <WalletLoggedIn /> : <WalletNotLoggedIn />}

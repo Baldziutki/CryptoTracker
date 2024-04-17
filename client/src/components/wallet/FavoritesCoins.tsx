@@ -76,7 +76,7 @@ export default function FavoritesCoins({ coins, setCoins }: { coins: FavoritesCo
     };
 
     return (
-        <div className="pt-12">
+        <div className="pt-4 max-xl:overflow-x-auto">
             <table className="w-full divide-y divide-gray-200 dark:divide-slate-800 shadow-xl">
                 <thead className="sticky top-0 bg-gray-50 dark:bg-slate-950">
                     <tr>

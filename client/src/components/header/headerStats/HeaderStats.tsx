@@ -73,24 +73,24 @@ export default function HeaderStats() {
 
     return (
         <div>
-            <div className="flex flex-row gap-6 text-xs pt-3">
-                <div>
+            <div className="flex flex-row gap-6 text-xs pt-3 items-center">
+                <div className="flex gap-1 items-center">
                     <span>Coins: </span>
                     <span className='font-medium'>{globalMarketData.coins}</span>
                 </div>
-                <div>
+                <div className="flex gap-1 items-center">
                     <span>Exchanges: </span>
                     <span className='font-medium'>{globalMarketData.exchanges}</span>
                 </div>
-                <div className="flex flex-row gap-1">
+                <div className="flex flex-row gap-1 items-center whitespace-nowrap">
                     <span>Market Cap: </span>
                     <span className="flex flex-row font-medium"><NoSSR number={globalMarketData.marketCap} currency={selectedCurrency}/> <RenderPercentage number={globalMarketData.percentage} _class='flex items-center' /></span>
                 </div>
-                <div>
+                <div  className="flex gap-1 items-center whitespace-nowrap">
                     <span>24h Vol: </span>
                     <span className='font-medium'><NoSSR number={globalMarketData.dailyVolume} currency={selectedCurrency}/></span>
                 </div>
-                <div>
+                <div className="flex flex-row gap-1 items-center whitespace-nowrap">
                     <span>Dominance: </span>
                     <span className='font-medium'>{globalMarketData.Dominance.firstCoin} {globalMarketData.Dominance.firstPercentages}% {globalMarketData.Dominance.secondCoin} {globalMarketData.Dominance.secondPercentages}%</span>
                 </div>

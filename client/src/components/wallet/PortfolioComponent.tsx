@@ -52,7 +52,7 @@ export default function PortfolioComponent({ portfolioCoins }: { portfolioCoins:
 
     return (
         <>
-            <div className="pt-6 grid grid-cols-3 gap-2">
+            <div className="pt-6 grid grid-cols-3 gap-2 max-lg:grid-cols-2 max-md:grid-cols-1">
                 {portfolioCoins.length > 0 && portfolioCoins.map((item: PortfolioComponentProps, index: number) => {
                     const coinBalance = coinsBalance[item.id] || 0;
                     return (

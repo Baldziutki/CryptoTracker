@@ -1,25 +1,23 @@
 
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import { Component } from 'react';
 
 
 export const RenderPercentage = ({ number, _class = '' }: { number: number, _class?: string }) => {
-    if (number === null) {
-        return (
-            <div className={_class}>-</div>
-        )
-    } else if (number < 0) {
-        return (
-            <div className={_class}>
-                <ChevronDownIcon color='red' />
-                <span className='text-red-500'>{number?.toFixed(2)}%</span>
-            </div>
-        )
-    } else {
-        return (
-            <div className={_class}>
-                <ChevronUpIcon color='green' />
-                <span className='text-green-500'>{number?.toFixed(2)}%</span>
-            </div>
-        )
-    }
+    const styles = ({
+        true: {
+            className: 'text-red-500',
+            color: 'red',
+            Component: ChevronDownIcon
+        },
+        false: {
+            className: 'text-green-500',
+            color: 'green',
+            Component: ChevronUpIcon
+        },
+    } as const)[String(number < 0) as 'true' | 'false'];
+
+    return (
+        <span className={styles.className + ' ' + _class}><styles.Component color={styles.color} className='inline' /> {number?.toFixed(2)}%</span>
+    );
 };
