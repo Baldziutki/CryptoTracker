@@ -8,6 +8,7 @@ import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import { RenderPercentage } from "../renderPercentage/RenderPercentage";
 import Pagination from "../pagination/Pagination";
 import { Star } from "akar-icons";
+import { useRouter } from "next/navigation";
 
 interface coinsAmountData {
     amount: number,
@@ -33,9 +34,9 @@ interface Filter {
     isHighest: boolean,
 }
 
-interface FavoriteCoin{
-    coinName:string,
-    coinId:string,
+interface FavoriteCoin {
+    coinName: string,
+    coinId: string,
 }
 
 export default function Cryptocurrencies() {
@@ -45,6 +46,8 @@ export default function Cryptocurrencies() {
     const [favoriteCoins, setFavoriteCoins] = useState<FavoriteCoin[]>([]);
     const searchParams = useSearchParams();
     const pagination = searchParams.get('page') !== null ? parseInt(searchParams.get('page')!) : 1;
+
+    const router = useRouter();
 
     const { selectedCurrency, loggedIn } = useContext(GlobalDataContext);
 
@@ -101,18 +104,18 @@ export default function Cryptocurrencies() {
 
     const handleFavoriteButton = async (coinName: string, coinId: string) => {
         const isFavorite = favoriteCoins.some((coin: FavoriteCoin) => coin.coinName === coinName);
-    
+
         if (isFavorite) {
             const updatedFavoriteCoins = favoriteCoins.filter((coin: FavoriteCoin) => coin.coinName !== coinName);
             setFavoriteCoins(updatedFavoriteCoins);
             await deleteFavoriteCoin(coinId);
-    
+
         } else {
-            
+
             const newFavoriteCoin = {
                 coinId: coinId,
                 coinName: coinName,
-               
+
             };
             const updatedFavoriteCoins = [...favoriteCoins, newFavoriteCoin];
             setFavoriteCoins(updatedFavoriteCoins);
@@ -192,7 +195,7 @@ export default function Cryptocurrencies() {
                         {coins.map((item: CoinMarketData) => (
                             <tr key={item.symbol}>
                                 <td className="px-2">
-                                    <button onClick={loggedIn ? (() => handleFavoriteButton(item.name, item.id)) : ()=>alert('You have to bo logged in!')}>
+                                    <button onClick={loggedIn ? (() => handleFavoriteButton(item.name, item.id)) : () => router.replace('/wallet')}>
                                         <Star strokeWidth={2} size={12} color={isFavorite(item.name) ? 'orange' : 'currentColor'} />
                                     </button>
                                 </td>

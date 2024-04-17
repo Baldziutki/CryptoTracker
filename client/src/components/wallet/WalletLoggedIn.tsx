@@ -1,29 +1,11 @@
 'use client'
 
 import { SegmentedControl } from "@radix-ui/themes"
-import AddCoinButton from "./AddCoinButton"
 import WalletOverview from "./WalletOverview"
 import { useContext, useEffect, useState } from "react"
-import { getFavoriteCoins, getWalletCoins } from "@/utils/api/fetchFromServer"
-import { getGivenCoinsMarketData } from "@/utils/api/fetchFromCoinGecko"
 import FavoritesCoins from "./FavoritesCoins"
 import PortfolioComponent from "./PortfolioComponent"
 import { WalletContext } from "@/utils/context/WalletContext"
-
-interface PortfolioCoinsType {
-    id: string,
-    name: string,
-    symbol: string,
-    image: string,
-    price: number,
-    market_cap_rank: number,
-    market_cap_value: number,
-    total_volume: number,
-    price_change_percentage_1h_in_currency: number,
-    price_change_percentage_24h_in_currency: number,
-    price_change_percentage_7d_in_currency: number,
-    coinNumber: number,
-}
 
 export default function WalletLoggedIn() {
 

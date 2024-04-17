@@ -5,7 +5,7 @@ import { Progress } from "@radix-ui/themes";
 import { GlobalDataContext } from "@/utils/context/GlobalDataContext";
 import { Star } from "akar-icons";
 import { addFavoriteCoin, deleteFavoriteCoin, getFavoriteCoins } from "@/utils/api/fetchFromServer";
-
+import { useRouter } from "next/navigation";
 
 interface PriceSection {
     image: string,
@@ -26,6 +26,9 @@ export default function PriceSection(props: PriceSection) {
     const { selectedCurrency, loggedIn } = useContext(GlobalDataContext);
     const { image, id, name, symbol, market_cap_rank, price, price_change, low_24h, high_24h, current_price_to_bitcoin, price_change_24h_to_bitcoin } = props;
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
+
+    const router = useRouter();
+
     const calculateRatio = (price: number) => {
         const ratio = (Math.abs(price - low_24h) / Math.abs(high_24h - price));
         if (ratio <= 1) {
@@ -36,13 +39,17 @@ export default function PriceSection(props: PriceSection) {
     }
 
     const handleFavoriteButton = async (coinName: string, coinId: string) => {
-        if (isFavorite) {
-            setIsFavorite(false);
-            await deleteFavoriteCoin(coinId);
+        if (loggedIn) {
+            if (isFavorite) {
+                setIsFavorite(false);
+                await deleteFavoriteCoin(coinId);
 
-        } else {
-            setIsFavorite(true);
-            await addFavoriteCoin(coinId, coinName);
+            } else {
+                setIsFavorite(true);
+                await addFavoriteCoin(coinId, coinName);
+            }
+        }else{
+            router.replace('/wallet')
         }
     };
 
@@ -60,16 +67,18 @@ export default function PriceSection(props: PriceSection) {
 
     return (
         <div className="pt-2 ">
-            <div className="flex flex-row justify-evenly">
-                <div className="flex items-center gap-1">
-                    <img src={image} className="w-12 h-12 rounded-full" />
-                    <span className="text-5xl text font-medium">{name}</span>
-                    <span className="text-lg text-gray-500 uppercase">{symbol}</span>
-                    <span className="text-lg text-gray-500">Price</span>
-                    <span className="text-lg bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
-                    <button onClick={() => handleFavoriteButton(name, id)}><Star strokeWidth={1} size={20} className={isFavorite ? 'fill-orange-400' : ''} /></button>
+            <div className="flex flex-row justify-evenly max-md:flex-col">
+                <div className="flex max-md:flex-col">
+                    <div className="flex items-center gap-1 max-[350px]:flex-col">
+                        <img src={image} className="w-12 h-12 rounded-full" />
+                        <span className="text-5xl text font-medium">{name}</span>
+                        <span className="text-lg text-gray-500 uppercase">{symbol}</span>
+                        <span className="text-lg text-gray-500">Price</span>
+                        <span className="text-lg bg-gray-100 rounded-md px-1 dark:bg-slate-800">#{market_cap_rank}</span>
+                        <button onClick={() => handleFavoriteButton(name, id)}><Star strokeWidth={1} size={20} className={isFavorite ? 'fill-orange-400' : ''} /></button>
+                    </div>
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center max-md:flex-col items-center">
                     <span className="text-4xl font-bold">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: selectedCurrency }).format(price)}</span>
                     <RenderPercentage number={price_change} _class="flex items-center font-bold text-lg" />
                 </div>

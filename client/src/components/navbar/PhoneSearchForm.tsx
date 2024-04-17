@@ -60,15 +60,15 @@ export default function PhoneSearchForm() {
 
     return (
         <AlertDialog.Root>
-            <AlertDialog.Trigger>
+            <AlertDialog.Trigger style={{ padding: '2' }}>
                 <Button
                     variant="soft" color="gray" radius="large"
-                    style={{ width: '300px', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    style={{ width: '82%', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                     <MagnifyingGlassIcon height="16" width="16" />
                     <span>Search</span>
                 </Button>
             </AlertDialog.Trigger>
-            <AlertDialog.Content maxWidth="360px">
+            <AlertDialog.Content maxWidth="82%">
                 <AlertDialog.Description size="2">
                     <div className='dark:bg-slate-800 bg-white'>
                         <div className="flex justify-between">
@@ -80,7 +80,7 @@ export default function PhoneSearchForm() {
                             <TextField.Root
                                 placeholder="Search" variant="soft" color="gray" radius="large"
                                 onChange={(e) => searchDebounce(() => searchCoin(e.target.value))}
-                                style={{width: '250px'}}>
+                                style={{ width: '82%' }}>
                                 <TextField.Slot>
                                     <MagnifyingGlassIcon height="16" width="16" />
                                 </TextField.Slot>
@@ -90,25 +90,25 @@ export default function PhoneSearchForm() {
                             <div className='grid' style={{ gridTemplateColumns: 'auto auto auto auto auto auto' }}>
                                 {searchedCoins.length ? (
                                     searchedCoins.map((item: any) => (
-                                        <button className='grid grid-cols-subgrid col-start-1 col-end-[-1] px-4 py-2 gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.id} onMouseOver={() => { setSelectedCoin(item) }}>
+                                        <a className='grid grid-cols-subgrid col-start-1 col-end-[-1] px-4 py-2 gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' href={`/coins/${item.id}`} key={item.id} onMouseOver={() => { setSelectedCoin(item) }}>
                                             <img src={item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                                             <span className='font-medium'> {item.name}</span>
                                             <span className='text-xs text-slate-400'>{item.symbol}</span>
                                             <RenderPercentage number={item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center' />
                                             <div className='grow' />
                                             <img src={item.data.sparkline} width={100} height={100} />
-                                        </button>
+                                        </a>
                                     ))
                                 ) : (
                                     coins.map((item: any) => (
-                                        <button className='grid grid-cols-subgrid col-start-1 col-end-[-1] px-4 py-2  gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' key={item.item.id} onMouseOver={() => { setSelectedCoin(item.item) }}>
+                                        <a className='grid grid-cols-subgrid col-start-1 col-end-[-1] px-4 py-2  gap-1 dark:hover:bg-gray-700 hover:bg-slate-200' href={`/coins/${item.item.id}`} key={item.item.id} onMouseOver={() => { setSelectedCoin(item.item) }}>
                                             <img src={item.item.thumb} style={{ width: '24px', height: '24px' }} className='rounded-full' />
                                             <span className='font-medium'> {item.item.name}</span>
                                             <span className='text-xs text-slate-400'>{item.item.symbol}</span>
                                             <RenderPercentage number={item.item.data.price_change_percentage_24h[selectedCurrency]} _class='flex items-center' />
                                             <div className='grow' />
                                             <img src={item.item.data.sparkline} width={100} height={100} />
-                                        </button>
+                                        </a>
                                     ))
                                 )}
                             </div>

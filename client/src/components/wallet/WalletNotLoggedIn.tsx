@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from "react";
+import Image from 'next/image'
 import { Button } from "@radix-ui/themes";
 import AuthForm from "../auth/AuthForm";
-
+import portfolio_png from "../../../public/portfolioPng.png"
 
 
 export default function WalletNotLoggedIn() {
@@ -16,6 +17,9 @@ export default function WalletNotLoggedIn() {
 
             <h1 className="text-4xl font-bold">Free & Powerful Crypto Portfolio Tracker</h1>
             <p className="text-xl">Track your crypto earnings like a pro, with a user-friendly and reliable portfolio tracker that you can rely on</p>
+            <Image
+                src={portfolio_png}
+                alt="portfolio" />
             <div className="flex gap-4">
                 <Button color="green" size={"4"} onClick={() => {
                     setWhichForm('register')

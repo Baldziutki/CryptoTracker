@@ -105,7 +105,7 @@ export default function Coin() {
                     <Breadcrumbs.Item name={params.slug} className="text-slate-400 capitalize" />
                 </Breadcrumbs.Root>
                 <PriceSection {...priceData} />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
                     <DataSection {...coinData} />
                     <div>
                         <HistoricalPrice {...historcialData} />
