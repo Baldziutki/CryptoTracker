@@ -4,14 +4,14 @@ import bcrypt from 'bcrypt';
 
 export default async function (fastify: FastifyInstance, _options: FastifyServerOptions) {
 
-  fastify.post<{ Body: UserType, Reply: {message:string, statusCode: number} }>(
+  fastify.post<{ Body: UserType, Reply: { message: string, statusCode: number } }>(
     '/register', {
     schema: {
       body: User,
     },
     errorHandler: (error, _request, reply) => {
       if (error.code as unknown as number === 11000) {
-        reply.code(409).send({message:"Account with given email already exists!",statusCode:409})
+        reply.code(409).send({ message: "Account with given email already exists!", statusCode: 409 })
         return
       }
       fastify.errorHandler(error, _request, reply)
@@ -22,7 +22,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       const hashPassword = await bcrypt.hash(password, 10);
 
       if (email?.length > 128 || password.length > 128) {
-        return reply.code(422).send({message:"Email or password too long!", statusCode:422});
+        return reply.code(422).send({ message: "Email or password too long!", statusCode: 422 });
       }
       const user = {
         email: email,
@@ -34,11 +34,11 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
       await fastify.mongo.db?.collection('users').insertOne(user);
 
-      reply.code(201).send({message:"Registered successfully!", statusCode:201});
+      reply.code(201).send({ message: "Registered successfully!", statusCode: 201 });
     }
   );
 
-  fastify.post<{ Body: UserType, Reply: {message:string, statusCode: number} }>(
+  fastify.post<{ Body: UserType, Reply: { message: string, statusCode: number } }>(
     '/login', {
     schema: {
       body: User,
@@ -49,7 +49,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       const user = await fastify.mongo.db?.collection('users').findOne({ email });
 
       if (!user) {
-        return reply.code(404).send({message:"User not found!", statusCode: 404});
+        return reply.code(404).send({ message: "User not found!", statusCode: 404 });
       }
 
       const validPassowrd = await bcrypt.compare(password, user['password']);
@@ -66,9 +66,9 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
             expires: new Date(Date.now() + 86400 * 1000)
           })
           .code(200)
-          .send({message:"logged in!", statusCode: 200})
+          .send({ message: "logged in!", statusCode: 200 })
       } else {
-        return reply.code(404).send({message:"Wrong password", statusCode: 404});
+        return reply.code(404).send({ message: "Wrong password", statusCode: 404 });
       }
     }
   );
@@ -96,14 +96,14 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
       }
     );
 
-    fastify.patch<{ Body: UserType, Reply: string }>(
+    fastify.patch<{ Body: UserType, Reply: { message: string } }>(
       '/changeEmail', {
       schema: {
         body: User,
       },
       errorHandler: (error, _request, reply) => {
         if (error.code as unknown as number === 11000) {
-          reply.code(409).send("Account with given email already exists!")
+          reply.code(409).send({ message: "Account with given email already exists!" })
           return
         }
         fastify.errorHandler(error, _request, reply)
@@ -116,7 +116,7 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
         const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
         if (!user) {
-          return reply.code(404).send("User not found!");
+          return reply.code(404).send({ message: "User not found!" });
         }
         const validPassowrd = await bcrypt.compare(password, user['password']);
 
@@ -133,14 +133,14 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
               expires: new Date(Date.now() + 86400 * 1000)
             })
             .code(200)
-            .send("email changed successfully!")
+            .send({ message: "email changed successfully!" })
         } else {
-          return reply.code(404).send("Wrong password");
+          return reply.code(404).send({ message: "Wrong password" });
         }
       }
     );
 
-    fastify.patch<{ Body: changePasswordType, Reply: string }>(
+    fastify.patch<{ Body: changePasswordType, Reply: { message: string } }>(
       '/changePassword', {
       schema: {
         body: changePassword,
@@ -153,16 +153,16 @@ export default async function (fastify: FastifyInstance, _options: FastifyServer
 
         const user = await fastify.mongo.db?.collection('users').findOne({ email: userEmail });
         if (!user) {
-          return reply.code(404).send("User not found!");
+          return reply.code(404).send({ message: "User not found!" });
         }
         const validPassowrd = await bcrypt.compare(password, user['password']);
 
         if (validPassowrd) {
           const hashPassword = await bcrypt.hash(newPassword, 10);
           await fastify.mongo.db?.collection('users').updateOne({ email: userEmail }, { $set: { password: hashPassword } });
-          return reply.code(200).send("Password successfully changed");
+          return reply.code(200).send({ message: "Password successfully changed" });
         } else {
-          return reply.code(404).send("Wrong password");
+          return reply.code(404).send({ message: "Wrong password" });
         }
       }
     );

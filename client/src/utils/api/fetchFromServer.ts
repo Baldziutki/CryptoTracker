@@ -55,11 +55,7 @@ export const changeEmail = async (email: string, password: string) => {
         }
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
-
-    return response.json;
+    return response;
 };
 
 export const changePassword = async (password: string, newPassword: string) => {
@@ -68,21 +64,13 @@ export const changePassword = async (password: string, newPassword: string) => {
         body: { password, newPassword },
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-    if (!response.ok || response.json === undefined) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
-
-    return response.json;
+    return response;
 };
 
 
 export const getWalletCoins = async () => {
     const response = await json('/getTransactions', {
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
-
-    if (!response.ok) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
 
     return response.json;
 };
@@ -137,10 +125,6 @@ export const editTransaction = async (transactionId: string, coinId: string,
 export const getFavoriteCoins = async () => {
     const response = await json('/getFavoriteCoins', {
     }, process.env.NEXT_PUBLIC_BACKEND_URL);
-
-    if (!response.ok) {
-        throw new Error(`${response.status} - ${response.json?.error}`);
-    }
 
     return response.json;
 };
