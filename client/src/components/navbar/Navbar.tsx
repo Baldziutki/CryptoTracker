@@ -11,7 +11,7 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="flex flex-row pt-2 max-xl:overflow-x-auto max-md:px-2 max-md:hidden">
+            <div className="flex flex-row pt-2 max-md:px-2 max-md:hidden">
                 <div className="flex flex-row items-center justify-center gap-6">
                     <a href="/">
                         <div className="flex flex-row items-center gap-1">
@@ -36,7 +36,7 @@ export default function Navbar() {
                         </div>
                     </a>
                 </div>
-                <div className="grow  max-md:pl-2" />
+                <div className="grow" />
                 <SearchButton setIsOpen={setIsOpen} />
                 {isOpen ? <SearchForm isOpen={isOpen} setIsOpen={setIsOpen} /> : null}
             </div>

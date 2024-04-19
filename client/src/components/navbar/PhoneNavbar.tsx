@@ -19,7 +19,7 @@ export default function PhoneNavbar() {
     const { loggedIn } = useContext(GlobalDataContext);
 
     return (
-        <div className="md:hidden pl-2 flex gap-2">
+        <div className="md:hidden pl-2 flex gap-2 items-center justify-center">
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
                     <Button color="blue" variant="soft" size={"3"}><HamburgerMenuIcon /></Button>
