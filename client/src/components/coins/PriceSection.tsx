@@ -30,12 +30,7 @@ export default function PriceSection(props: PriceSection) {
     const router = useRouter();
 
     const calculateRatio = (price: number) => {
-        const ratio = (Math.abs(price - low_24h) / Math.abs(high_24h - price));
-        if (ratio <= 1) {
-            return ratio * 100;
-        } else {
-            return (Math.abs(high_24h - price) / Math.abs(price - low_24h)) * 100;
-        }
+        return ((price-low_24h) / (high_24h-low_24h))*100
     }
 
     const handleFavoriteButton = async (coinName: string, coinId: string) => {
