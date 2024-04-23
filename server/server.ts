@@ -14,16 +14,15 @@ declare module 'fastify' {
     interface FastifyInstance {
         verifyJWT: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     }
-  }
+}
 
-export const build = async () => {
+export const build = async (dbName: string | undefined) => {
 
     coinGeckoDataInterval();
 
     dotenv.config();
 
     const dbUrl: string | undefined = process.env["DB_URL"];
-    const dbName: string | undefined = process.env["DB_NAME"];
 
     if (!dbUrl) {
         throw new Error('DB_URL not specified in environment variables');
