@@ -45,10 +45,11 @@ Coins page:
 Search form:
 ![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/d90da202-ef85-4682-9eb2-0472ed2cc1cd)
 Coin details page:
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/21eeee6a-380e-457f-aba2-25484832bd22)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/b98e452a-3b7d-4f66-bf19-6917c64fd1c2)
 Exchanges page:
 ![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/d6a92419-615f-4945-8ff5-b3fa3be7acf8)
 Wallet page:
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/02a6a384-f74f-4955-864a-6c9bc353df54)
 ![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/4abbc1de-ea17-4841-b8a4-02040d586593)
 ![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/033eb4e1-a9d0-4706-8968-8b631fddc24d)
 ![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/66f07e7e-c47b-49d9-b604-7cb862f704f6)
