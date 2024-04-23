@@ -1,6 +1,6 @@
 # CryptoTracker
 
-CryptoTracker is a cryptocurrency tracking application built with TypeScript, Next.js, Tailwind CSS, and Radix UI for the frontend. Node.js, Fastify and TypeScript for the backend. It provides real-time data on various cryptocurrencies using the CoinGecko API.
+CryptoTracker is a cryptocurrency tracking application built with TypeScript, Next.js, Tailwind CSS, and Radix UI for the frontend. Node.js, Fastify, and TypeScript are used for the backend. It provides real-time data on various cryptocurrencies using the CoinGecko API. For integration tests native node:test were used
 
 ## Features
 
@@ -22,29 +22,39 @@ CryptoTracker is a cryptocurrency tracking application built with TypeScript, Ne
   - ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
   - ![Fastify](https://img.shields.io/badge/-Fastify-000000?style=flat-square&logo=fastify&logoColor=white)
   - ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
-
+- **Integration Tests**:
+  - ![node:test](https://img.shields.io/badge/-node:test-339933?style=flat-square&logo=node.js&logoColor=white)
 ## Usage
 
 1. Browse through the list of cryptocurrencies to view their details.
-2. Register or log in to track your favorite coins.
-3. Use the search functionality to quickly find specific coins.
-4. Explore various metrics such as price, market cap, and volume.
-5. Stay updated with real-time data from the CoinGecko API.
+2. Register or log in to track your favorite coins and your portfolio results.
+4. Use the search functionality to quickly find specific coins.
+5. Explore various metrics such as price, market cap, and volume.
+6. Stay updated with real-time data from the CoinGecko API.
+
+## Responsive Design
+
+CryptoTracker is built with a responsive design, ensuring a seamless experience across various devices and screen sizes. The UI components adapt dynamically to provide optimal usability and readability on desktops, tablets, and mobile devices.
 
 ## Screenshots
+
 Coins page: 
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/2e832c06-6c3c-44df-96a4-1c19967a9570)
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/404fda21-c703-46ba-9267-dd551041e163)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/6cd71018-0a15-40fb-8a7b-b6ee53a6d84f)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/6db91a85-e0a9-432a-a554-1e2f26005df6)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/2f4e5516-5b4b-43a0-9219-9acb8fbfc06d)
 Search form:
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/0bfca7d3-bc00-45a9-9e5a-c78de1a61254)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/d90da202-ef85-4682-9eb2-0472ed2cc1cd)
 Coin details page:
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/1189fbd9-8151-4810-8d29-4ed6b840306d)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/21eeee6a-380e-457f-aba2-25484832bd22)
 Exchanges page:
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/26cc3186-e0e6-47b9-a4e2-df72377914c0)
-Dark theme coins page:
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/4063b346-de6a-41bb-a7f7-4a21617d892d)
-Dark theme coin details page:
-![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/51abbc47-b8b4-497d-b831-0afb98b59de8)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/d6a92419-615f-4945-8ff5-b3fa3be7acf8)
+Wallet page:
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/4abbc1de-ea17-4841-b8a4-02040d586593)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/033eb4e1-a9d0-4706-8968-8b631fddc24d)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/66f07e7e-c47b-49d9-b604-7cb862f704f6)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/12a07010-535c-4bc0-9fcb-8a9ecc9577ed)
+![image](https://github.com/Baldziutki/CryptoTracker/assets/107717515/8dde8a0b-d834-44ec-81a7-2dc5d2dc3f1b)
+
 
 ## Acknowledgements
 
