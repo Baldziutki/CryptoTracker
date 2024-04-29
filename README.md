@@ -22,6 +22,8 @@ CryptoTracker is a cryptocurrency tracking application built with TypeScript, Ne
   - ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
   - ![Fastify](https://img.shields.io/badge/-Fastify-000000?style=flat-square&logo=fastify&logoColor=white)
   - ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
+- **Database:**
+  - ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)
 - **Integration Tests**:
   - ![node:test](https://img.shields.io/badge/-node:test-339933?style=flat-square&logo=node.js&logoColor=white)
 ## Usage
@@ -63,5 +65,6 @@ Wallet page:
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Radix UI](https://radix-ui.com/)
 - [Fastify](https://www.fastify.io/)
+- [MongoDB](https://www.mongodb.com)
 - [CoinGecko API](https://www.coingecko.com/en/api)
 - [Alternative Fear&Greed Index API](https://alternative.me/crypto/fear-and-greed-index/)
